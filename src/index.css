@@ -1,0 +1,104 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+body {
+  font-size: 1.6rem;
+  padding: 0 2rem;
+}
+
+.contenedor {
+  width: 95%;
+  max-width: 120rem;
+  margin: 0 auto;
+}
+
+.parteCliente{
+  background-color:burlywood;
+  width: 100%;
+  border: .1rem solid black;
+  border-bottom: none;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  gap:2rem
+}
+.parteCliente div,.parteCliente2 div{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.parteCliente2{
+  background-color: burlywood;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  border: .1rem solid black;
+  border-top: none;
+  padding-bottom: 2rem;
+}
+
+.parteCliente2 div input,.parteCliente2 div select{
+  width: 90%;
+}
+
+.parteCliente div #nombre,.parteCliente div input{
+  width: 100%;
+}
+
+.parteCliente div #saldo,.parteCliente div #codigo{
+  width: 50%;
+}
+
+.parteProductos .buscarProductos{
+  display: grid;
+  grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
+}
+
+.parteProductos .buscarProductos div{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.w-100{
+  width: 108%;
+}
+.w-50{
+  width: 100%;
+}
+
+.parteProductos .listarProductos{
+  margin-top: 2rem;
+  border: .1rem solid black;
+  min-height: 25rem;
+}
+
+.parteProductos .listarProductos table{
+  width: 100%; 
+  border-collapse: collapse;
+}
+
+.parteProductos .listarProductos table thead tr{
+  background-color: chocolate;
+}
+
+.parteProductos .listarProductos table thead th{
+  border: .1rem solid black
+}
+
+.parteProductos .listarProductos table thead .th-nombre{
+  width: 40%;
+}
