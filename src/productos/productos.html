@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" href="./productos.css">
+</head>
+<body class="productos">
+        <div class="buscador">
+            <fieldset>
+                <legend>Buscador</legend>
+
+                <div class="caja">
+                    <label for="seleccion">Seleccion</label>
+                    <select name="seleccion" id="seleccion">
+                        <option value="codigo">Codigo</option> 
+                        <option value="descripcion">Descripcion</option>
+                        <option value="marca">Marca</option>
+                        <option value="rubro">Rubro</option>
+                    </select>
+                </div>
+                <div class="caja">
+                    <label for="buscador">Buscar Producto</label>
+                    <input type="text" name="buscarProducto" autofocus id="buscarProducto">
+                </div>
+            </fieldset>
+        </div>
+        <div class="tabla">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Descripcion</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Marca</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="botones">
+
+            <button class="agregar">Agregar Producto</button>
+            <button class="modificar">Modificar Producto</button>
+            <button class="eliminar">Eliminar Producto</button>
+            <button class="salir">Salir</button>
+        </div>
+</body>
+<script src="./productos.js"></script>
+</html>

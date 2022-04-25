@@ -1,0 +1,26 @@
+.menu{
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightgray;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 2rem;
+}
+
+.card img{
+    width: 10rem;
+    height: 9rem;
+    border-radius: 1rem;
+}
+
+.card h3{
+    margin-top: 1rem;
+    margin-bottom: 0;
+}

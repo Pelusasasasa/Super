@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movimiento Producto</title>
+    <link rel="stylesheet" href="./movimiento.css">
+</head>
+<body>
+    <main class="buscador">
+        <div class="select">
+            <label for="rubro">Rubro</label>
+            <select name="rubro" id="rubro">
+            </select>
+        </div>
+        <div class="fechas">
+            <div class="desde">
+                <label for="desde">Desde</label>
+                <input type="date" name="desde" id="desde">
+            </div>
+            <div class="hasta">
+                <label for="hasta">Hasta</label>
+                <input type="date" name="hasta" id="hasta">
+            </div>
+            <div class="mes">
+                <button>Este Mes</button>
+            </div>
+        </div>
+    </main>
+    <section class="tabla">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nro-venta</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Cod-Prod</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Total</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section class="footer">
+        <button class="volver">Volver</button>
+        <div class="total">
+            <label for="total">Total</label>
+            <input type="text" name="total" id="total">
+        </div>
+    </section>
+</body>
+<script src="./movimiento.js"></script>
+</html>

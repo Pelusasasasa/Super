@@ -1,0 +1,104 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+      Arial, sans-serif;
+  
+  }
+  
+  html {
+    box-sizing: border-box;
+    font-size: 62.5%;
+  }
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+  body {
+    font-size: 1.6rem;
+    padding: 0 2rem;
+    background-color: burlywood;
+  }
+
+.filtro{
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 1rem ;
+  align-items: center;
+}
+button{
+  border: none;
+  font-size: 2rem;
+  margin: 0;
+}
+
+button:hover{
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.filtro .seleccionado{
+  background-color: gray;
+}
+
+.filtro .none{
+  display: none !important;
+}
+
+.filtro .dia,.filtro .mes,.filtro .anio{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.filtro label{
+  font-size: 3rem;
+}
+.filtro .mes select,.filtro input{
+  padding: .5rem;
+  font-size: 2rem;
+}
+
+
+.listado{
+  background-color: white;
+  height: 50rem;
+  overflow: scroll;
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table thead th{
+  border: .1rem solid;
+}
+
+
+table tbody td{
+  text-align: center;
+}
+
+table tbody tr:hover{
+  background-color: gray;
+}
+
+table tbody .total{
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.botones{
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.botones label{
+  font-size: 2rem;
+}
+
+.botones #total{
+  padding: 1rem;
+  font-size: 1.5rem;
+}

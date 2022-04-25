@@ -1,38 +1,34 @@
 const { app, BrowserWindow } = require('electron');
+const { ipcMain } = require('electron/main');
 const path = require('path');
+var isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
 
-// Handle creating/removing shortcuts on Windows when installing/uninstalling.
-if (require('electron-squirrel-startup')) {
-  // eslint-disable-line global-require
-  app.quit();
+if (isDev) {
+    require('electron-reload')(__dirname, {
+        electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+    });
 }
 
+if (require('electron-squirrel-startup')) {
+  app.quit();
+}
+let ventanaPrincipal;
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    // width: 800,
-    // height: 600,
+   ventanaPrincipal = new BrowserWindow({
     webPreferences:{
-      nodeIntegration:true
+      nodeIntegration:true,
+      contextIsolation: false,
     }
   });
-  mainWindow.maximize()
+  ventanaPrincipal.maximize()
 
   // and load the index.html of the app.
-  mainWindow.loadFile(path.join(__dirname, 'index.html'));
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  ventanaPrincipal.loadFile(path.join(__dirname, 'menu.html'));
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', createWindow);
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -40,12 +36,42 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
+ipcMain.on('enviar',(e,args)=>{
+  ventanaPrincipal.webContents.send('recibir',JSON.stringify(args));
+});
+
+
+ipcMain.on('abrir-ventana',(e,args)=>{
+  abrirVentana(args.path,700,1200)
+  nuevaVentana.on('ready-to-show',async()=>{
+    nuevaVentana.webContents.send('informacion',args)
+  })
+})
+
+
+let nuevaVentana;
+const abrirVentana = (direccion,altura,ancho)=>{
+  nuevaVentana = new BrowserWindow({
+    height: altura,
+    width: ancho,
+    parent:ventanaPrincipal,
+    webPreferences:{
+      nodeIntegration: true,
+      contextIsolation:false
+    }
+  });
+
+  nuevaVentana.loadFile(path.join(__dirname, `${direccion}`));
+
+
+  // nuevaVentana.setMenuBarVisibility(false);
+}
+
+ipcMain.on('informacion-a-ventana',(e,args)=>{
+  ventanaPrincipal.webContents.send('informacion-a-ventana',JSON.stringify(args));
+})

@@ -16,12 +16,14 @@ html {
 body {
   font-size: 1.6rem;
   padding: 0 2rem;
+  background-color: burlywood;
 }
 
 .contenedor {
   width: 95%;
   max-width: 120rem;
   margin: 0 auto;
+
 }
 
 .parteCliente{
@@ -29,7 +31,7 @@ body {
   width: 100%;
   border: .1rem solid black;
   border-bottom: none;
-  padding: 2rem;
+  padding: 1rem;
   display: grid;
   grid-template-columns: 1fr 5fr 1fr;
   gap:2rem
@@ -47,15 +49,17 @@ body {
   grid-template-columns: repeat(3,1fr);
   border: .1rem solid black;
   border-top: none;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
 }
 
 .parteCliente2 div input,.parteCliente2 div select{
-  width: 90%;
+  width: 70%;
+  font-size: 1.8rem;
 }
 
 .parteCliente div #nombre,.parteCliente div input{
   width: 100%;
+  font-size: 1.8rem;
 }
 
 .parteCliente div #saldo,.parteCliente div #codigo{
@@ -73,6 +77,11 @@ body {
   align-items: center;
 }
 
+.parteProductos .buscarProductos div input{
+  width: 70%;
+  font-size: 1.7rem;
+}
+
 .w-100{
   width: 108%;
 }
@@ -81,12 +90,15 @@ body {
 }
 
 .parteProductos .listarProductos{
+  background-color: white;
   margin-top: 2rem;
   border: .1rem solid black;
-  min-height: 25rem;
+  min-height: 35rem;
+  overflow: scroll;
 }
 
 .parteProductos .listarProductos table{
+
   width: 100%; 
   border-collapse: collapse;
 }
@@ -99,6 +111,45 @@ body {
   border: .1rem solid black
 }
 
+.parteProductos tbody tr:hover{
+  background-color: lightgray;
+}
+
+.parteProductos tbody .seleccionado{
+  background-color: gray;
+}
+
+.parteProductos tbody .seleccionado:hover{
+  background-color: gray;
+}
+
 .parteProductos .listarProductos table thead .th-nombre{
   width: 40%;
+}
+
+.parteProductos tbody td{
+  border: .1rem solid black;
+}
+
+footer{
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+}
+
+footer button{
+  padding: 1.2rem;
+  font-size: 1.7rem;
+  border-radius: 7.5rem;
+  border: none;
+}
+
+footer button:hover{
+  cursor: pointer;
+  transform: scale(1.2);
+}
+
+.totales{
+  display: flex;
+  justify-content: space-between;
 }

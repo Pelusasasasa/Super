@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recibo</title>
+    <link rel="stylesheet" href="./recibo.css">
+</head>
+<body>
+    <section class="cliente">
+        <div class="nombre">
+            <div class="input">
+                <label for="codigo">Codigo</label>
+                <input type="text" autofocus id="codigo" name="codigo">
+            </div>
+            <div class="input">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" name="nombre">
+            </div>
+
+            <div class="input">
+                <label for="saldo">Saldo</label>
+                <input type="text" disabled id="saldo" name="saldo">
+            </div>
+        </div>
+        <div class="fecha">
+            <div class="input">
+                <label for="localidad">Localidad</label>
+                <input type="text" id="localidad" name="localidad">
+            </div>
+            <div class="input">
+                <label for="direccion">Direccion</label>
+                <input type="text" id="direccion" name="direccion">
+            </div>
+    
+            <div class="input">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" name="fecha">
+            </div>
+        </div>
+    </section>
+
+    <section class="tabla">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nro-venta</th>
+                    <th>Importe</th>
+                    <th>Pagado</th>
+                    <th>Pagado Actual</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </section>
+
+    <footer>
+        <div class="saldos">
+            <main class="saldoFavor">
+                <label for="saldoFavor">Saldo A Favor</label>
+                <input type="text" disabled value="0.00" name="saldoFavor" id="saldoFavor">
+            </main>
+            <main class="total">
+                <label for="total">Total</label>
+                <input type="text" name="total" value="0.00" id="total">
+            </main>
+        </div>
+        <div class="botones">
+            <button class="cancelar">Cancelar Recibo</button>
+            <button class="imprimir">Imprimir</button>
+        </div>
+    </footer>
+</body>
+<script src="./recibo.js"></script>
+</html>

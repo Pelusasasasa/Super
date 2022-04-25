@@ -1,0 +1,199 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+      Arial, sans-serif;  
+}
+  
+html {
+    box-sizing: border-box;
+    font-size: 62.5%;
+}
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+body {
+    font-size: 1.6rem;
+    padding: 0 2rem;
+    background-color: burlywood;
+}
+
+
+h1{
+    text-align: center;
+}
+
+.none{
+    display: none !important;
+}
+
+.seccionCliente{
+    display: flex;
+    flex-direction: column;
+}
+
+.buscador{
+    display: flex;
+    justify-content: space-around;
+}
+
+.buscador div{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.buscador div input{
+    padding: 1.2rem;
+}
+
+.buscador .buscador-nombre{
+    width: 50%;
+}
+
+.tabla{
+    margin-top: 1rem;
+    height: 70vh;
+    border: .1rem solid black;
+    background-color: white;
+
+}
+
+table{
+
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table thead th{
+    border: .1rem solid black;
+}
+
+table tbody tr{
+    text-align: center;
+}
+
+table tbody tr:hover{
+    cursor: pointer;
+}
+
+table tbody tr td{
+    border: .1rem solid black
+}
+
+.botones{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+button{
+    border: none;
+    padding: 1rem;
+    font-size: 2rem;
+    border-radius: 7.5rem;
+}
+
+button:hover{
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+.seleccionado{
+    background-color: lightgray;
+}
+
+/*Agregar Cliente*/
+
+.seccion-agregarCliente{
+    display: flex;
+    flex-direction: column;
+}
+
+.seccion-agregarCliente .primero{
+    display: flex;
+    margin-bottom: 2rem;
+
+}
+
+.seccion-agregarCliente .primero div{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-right: 5rem;
+}
+
+.seccion-agregarCliente .primero div input{
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+.seccion-agregarCliente .primero div #nombre{
+    width: 300%;
+}
+
+
+.seccion-agregarCliente .segundo{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.seccion-agregarCliente .segundo div{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.seccion-agregarCliente .segundo div input{
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+.seccion-agregarCliente .botones{
+    margin-top: 5rem;
+}
+
+/*Agregar Cliente*/
+
+/*Modificar Cliente*/
+
+.seccion-modificarCliente .primero{
+    display: flex; 
+    margin-bottom: 5rem;
+
+}
+
+.seccion-modificarCliente .primero div{
+    display: flex;
+    flex-direction: column;
+    margin-right: 5rem;
+    text-align: center;
+}
+
+.seccion-modificarCliente .primero div input{
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+.seccion-modificarCliente .primero div #nombre{
+    width: 300%;
+}
+
+.seccion-modificarCliente .segundo{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5rem;
+}
+
+.seccion-modificarCliente .segundo div{
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+}
+
+.seccion-modificarCliente .segundo div input{
+    font-size: 1.5rem;
+    padding: 1rem;
+}
+
+/*Modificar Cliente*/

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Cuenta</title>
+    <link rel="stylesheet" href="./consultarCuenta.css">
+</head>
+<body class="consultaCuenta">
+        <section class="buscador">
+            <div class="">
+                <label for="buscar">Buscar cliente</label>
+                <input type="text" id="buscar" autofocus name="buscar">
+            </div>
+
+            <button class="actualizar">Actualizar</button>
+
+            <button class="volver">Volver</button>
+        </section>
+        <main class="listas">
+            <section class="listaVentas">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Fecha</td>
+                            <td>Nro-Venta</td>
+                            <td>ID Cliente</td>
+                            <td>Cliente</td>
+                            <td>Precio</td>
+                            <td>Descuento</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+            <section class="listaProductos">
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Fecha</td>
+                            <td>cod-Prod</td>
+                            <td>Producto</td>
+                            <td>Cantidad</td>
+                            <td>Precio</td>
+                            <td>Total</td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+        </main>
+</body>
+<script src="./consultarCuenta.js"></script>
+</html>

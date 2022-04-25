@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caja</title>
+    <link rel="stylesheet" href="./caja.css">
+</head>
+<body>
+    <section class="filtro">
+        <div class="seleccion">
+            <button class="botonDia seleccionado">Dia</button>
+            <button class="botonMes">Mes</button>
+            <button class="botonAnio">Año</button>
+        </div>
+        <main class="fechas">
+            <div class="dia">
+                <label for="fecha">Fecha</label>
+                <input type="date" name="fecha" id="fecha">
+            </div>
+            <div class="mes none">
+                <label for="mes">Mes</label>
+                <select name="mes" id="mes">
+                    <option value="01">Enero</option>
+                    <option value="02">Febrero</option>
+                    <option value="03">Marzo</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Mayo</option>
+                    <option value="06">Junio</option>
+                    <option value="07">Julio</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            <div class="anio none">
+                <label for="anio">Año</label>
+                <input type="text" name="anio" id="anio">
+            </div>
+        </main>
+
+    </section>
+    <section class="listado">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nro</th>
+                    <th>Hora</th>
+                    <th>Cliente</th>
+                    <th>Cod Producto</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th> 
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+    <section class="botones">
+        <button class="volver">Volver</button>
+        <div class="totales">
+            <label for="total">Total</label>
+            <input type="text" name="total" id="total">
+        </div>
+    </section>
+</body>
+<script src="./caja.js"></script>
+</html>

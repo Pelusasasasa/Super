@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World!</title>
+    <link rel="stylesheet" href="index.css" />
+  </head>
+  <body>
+    <header>
+      <div class="parteCliente">
+        
+        <div>
+          <input placeholder="Codigo" autofocus type="text" id="codigo" name="codigo">
+        </div>
+        <div>
+          <input placeholder="Nombre" type="text" id="nombre" name="nombre">
+        </div>
+        <div>
+          <input type="text" disabled  id="saldo" name="saldo">
+        </div>
+      </div>
+
+    <div class="parteCliente2">
+      <div>
+        <label for="telefono">Telefono</label>
+        <input type="text" id="telefono" name="telefono">
+      </div>
+
+      <div>
+        <label for="localidad">Localidad</label>
+        <input type="text" id="localidad" name="localidad">
+      </div>
+
+      <div>
+        <label for="direccion">Direccion</label>
+        <input type="text" id="direccion" name="direccion">
+      </div>
+
+
+    </div>
+
+    </header>
+    <main class="parteProductos">
+      <section class="buscarProductos">
+        <div>
+          <label for="cantidad">Cantidad</label>
+          <input class="w-50" type="number" name="cantidad" value="1.00" id="cantidad">
+        </div>
+        <div>
+          <label for="cod-barra">Codigo</label>
+          <input class="w-50" type="text" name="cod-barra" id="cod-barra">
+        </div>
+        <div>
+          <label for="descripcion">Producto</label>
+          <input class="w-100" type="text" name="descripcion" id="descripcion">
+        </div>
+        <div>
+          <label for="precio-U">Precio-U</label>
+          <input class="w-50" type="text" name="precio-U" id="precio-U">
+        </div>
+        <div>
+          <label for="precio-total">Precio-T</label>
+          <input class="w-50" type="text" name="precio-total" id="precio-total">
+        </div>
+      </section>
+      <section class="listarProductos">
+        <table>
+          <thead>
+            <tr>
+              <th>Cantidad</th>
+              <th>Cod-Barras</th>
+              <th class="th-nombre">Nombre</th>
+              <th>Precio-U</th>
+              <th>precio-T</th>
+            </tr>
+          </thead>
+          <tbody class="tbody"></tbody>
+        </table>
+      </section>
+    </main>
+    <main class="totales">
+      <div class="descuento">
+        <input type="text" name="descuentoPor" id="descuentoPor" value="0.00">
+        <input type="text" name="descuento" id="descuento" disabled value="0.00">
+      </div>
+
+      <div class="condicionVenta">
+        <div class="contado">
+          <input type="radio" name="condicion" value="CD" id="contado">
+          <label for="contado">Contado</label>
+        </div>
+        <div class="cuentaCorriente">
+
+          <input type="radio" name="condicion" value="CC" id="cuentaCorriente">
+          <label for="cuentaCorriente">Cuenta Corriente</label>
+        </div>
+      </div>
+
+      <div class="total">
+        <label for="total">Total</label>
+        <input type="text" name="total" id="total" value="0.00">
+      </div>
+    </main>
+    <footer class="botones">
+        <button class="volver">volver</button>
+        <button class="borrar">Borrar</button>
+        <button class="facturar">Facturtar</button>
+
+        <div class="cobrado">
+          <label for="cobrado">Cobrado</label>
+          <input type="text" name="cobrado" id="cobrado" value="0.00">
+        </div>
+    </footer>
+  </body>
+  <script src="./venta.js"></script>
+</html>
