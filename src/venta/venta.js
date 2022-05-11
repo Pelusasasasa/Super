@@ -31,7 +31,7 @@ const facturar = document.querySelector('.facturar');
 const borrar = document.querySelector(".borrar");
 
 
-
+let movimientos = [];
 let totalGlobal = 0;
 
 codigo.addEventListener('keypress',e=>{
@@ -184,6 +184,7 @@ facturar.addEventListener('click',async e=>{
          await cargarMovimiento(producto,venta._id,venta.cliente);
          producto.producto.precio = producto.producto.precio - parseFloat((parseFloat(descuentoPor.value) * producto.producto.precio / 100).toFixed(2));
      }
+     await axios.post(`${URL}movimiento`,movimientos);
     //sumamos al cliente el saldo y agregamos la venta a la lista de venta
      venta.tipo_venta === "CC" && sumarSaldo(venta.idCliente,venta.precio,venta._id);
     
@@ -234,8 +235,6 @@ const ponerEnCuentaHistorica = async(venta)=>{
 //Cargamos el movimiento de producto a la BD
 const cargarMovimiento = async({cantidad,producto},numero,cliente)=>{
     const movimiento = {};
-    movimiento._id = (await axios.get(`${URL}movimiento`)).data;
-    movimiento._id = parseFloat(movimiento._id);
     movimiento.codProd = producto._id;
     movimiento.producto = producto.descripcion;
     movimiento.cliente = cliente
@@ -243,8 +242,7 @@ const cargarMovimiento = async({cantidad,producto},numero,cliente)=>{
     movimiento.precio = parseFloat((producto.precio - (producto.precio * parseFloat(descuentoPor.value) / 100)).toFixed(2));
     movimiento.rubro = producto.rubro;
     movimiento.nro_venta = numero;
-    console.log(movimiento.precio)
-    await axios.post(`${URL}movimiento`,movimiento);
+    movimientos.push(movimiento);
 }
 
 

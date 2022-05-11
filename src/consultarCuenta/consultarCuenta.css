@@ -79,3 +79,7 @@ table tbody td{
     text-align: center;
     border-bottom: .1rem solid black;
 }
+
+.seleccionado{
+    background-color: gray;
+}
