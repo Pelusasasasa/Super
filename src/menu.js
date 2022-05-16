@@ -1,4 +1,9 @@
-const { default: axios } = require("axios");
+document.addEventListener('keyup',e=>{
+    console.log(e.keyCode)
+    if (e.keyCode === 112) {
+        location.href = "./venta/index.html"
+    }
+})
 
 const ventas = document.querySelector('.ventas');
 ventas.addEventListener('click',e=>{

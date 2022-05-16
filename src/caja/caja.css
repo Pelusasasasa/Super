@@ -25,6 +25,13 @@ body {
   margin-bottom: 1rem ;
   align-items: center;
 }
+
+.none{
+  display: none;
+}
+
+
+
 button{
   border: none;
   font-size: 2rem;
@@ -74,6 +81,9 @@ table thead th{
   border: .1rem solid;
 }
 
+table tbody .bold{
+  font-weight: bold;
+}
 
 table tbody td{
   text-align: center;

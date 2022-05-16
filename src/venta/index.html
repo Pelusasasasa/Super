@@ -10,7 +10,7 @@
       <div class="parteCliente">
         
         <div>
-          <input placeholder="Codigo" autofocus type="text" id="codigo" name="codigo">
+          <input placeholder="Codigo" type="text" id="codigo" name="codigo">
         </div>
         <div>
           <input placeholder="Nombre" type="text" id="nombre" name="nombre">
@@ -47,20 +47,16 @@
           <input class="w-50" type="number" name="cantidad" value="1.00" id="cantidad">
         </div>
         <div>
-          <label for="cod-barra">Codigo</label>
-          <input class="w-50" type="text" name="cod-barra" id="cod-barra">
-        </div>
-        <div>
-          <label for="descripcion">Producto</label>
-          <input class="w-100" type="text" name="descripcion" id="descripcion">
+          <label for="cod-barra">Codigo/Descripcion</label>
+          <input class="w-50" type="text" name="cod-barra" autofocus id="cod-barra">
         </div>
         <div>
           <label for="precio-U">Precio-U</label>
           <input class="w-50" type="text" name="precio-U" id="precio-U">
         </div>
         <div>
-          <label for="precio-total">Precio-T</label>
-          <input class="w-50" type="text" name="precio-total" id="precio-total">
+          <label for="rubro">Rubro</label>
+          <input type="text" name="rubro" id="rubro">
         </div>
       </section>
       <section class="listarProductos">
@@ -86,11 +82,11 @@
 
       <div class="condicionVenta">
         <div class="contado">
-          <input type="radio" name="condicion" value="CD" id="contado">
+          <input type="radio" name="condicion" checked value="CD" id="contado">
           <label for="contado">Contado</label>
         </div>
-        <div class="cuentaCorriente">
 
+        <div class="cuentaCorriente none">
           <input type="radio" name="condicion" value="CC" id="cuentaCorriente">
           <label for="cuentaCorriente">Cuenta Corriente</label>
         </div>

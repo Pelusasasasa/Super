@@ -15,6 +15,7 @@ const nombre = document.querySelector('#nombre');
 const localidad = document.querySelector('#localidad');
 const telefono = document.querySelector('#telefono');
 const direccion = document.querySelector('#direccion');
+const condicionFacturacion = document.querySelector('#condicionFacturacion');
 const modificar = document.querySelector('.modificar');
 const salir = document.querySelector('.salir');
 
@@ -26,6 +27,7 @@ const ponerInputs = async(id)=>{
     localidad.value = cliente.localidad;
     direccion.value = cliente.direccion;
     telefono.value = cliente.telefono;
+    condicionFacturacion.value = cliente.condicionFacturacion;
 }
 
 nombre.addEventListener('keypress',e=>{
@@ -68,6 +70,7 @@ modificar.addEventListener('click',async e=>{
     cliente.localidad = localidad.value;
     cliente.telefono = telefono.value;
     cliente.direccion = direccion.value;
+    cliente.condicionFacturacion = condicionFacturacion.value;
     const mensaje = (await axios.put(`${URL}clientes/id/${cliente._id}`,cliente)).data;
     alert(mensaje);
     window.close();

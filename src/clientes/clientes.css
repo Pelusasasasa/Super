@@ -111,8 +111,8 @@ button:hover{
 }
 
 .seccion-agregarCliente .primero{
-    display: flex;
-    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
 
 }
 
@@ -127,11 +127,6 @@ button:hover{
     padding: 1rem;
     font-size: 1.5rem;
 }
-
-.seccion-agregarCliente .primero div #nombre{
-    width: 300%;
-}
-
 
 .seccion-agregarCliente .segundo{
     display: flex;
@@ -158,8 +153,8 @@ button:hover{
 /*Modificar Cliente*/
 
 .seccion-modificarCliente .primero{
-    display: flex; 
-    margin-bottom: 5rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
 
 }
 
@@ -175,9 +170,6 @@ button:hover{
     font-size: 1.5rem;
 }
 
-.seccion-modificarCliente .primero div #nombre{
-    width: 300%;
-}
 
 .seccion-modificarCliente .segundo{
     display: flex;
@@ -197,3 +189,9 @@ button:hover{
 }
 
 /*Modificar Cliente*/
+
+/* Global */
+.primero select{
+    font-size: 2rem;
+    padding: 1rem;
+}

@@ -52,7 +52,7 @@ const llenarInputs = async(codigoProducto)=>{
     rubro.value = producto.rubro;
     costo.value = producto.costo;
     impuesto.value = producto.impuesto;
-    costoIva.value = producto.costo + producto.impuesto;
+    costoIva.value = (producto.costo + (producto.costo * producto.impuesto / 100)).toFixed(2);
     ganancia.value = producto.ganancia;
     total.value = producto.precio;    
 }
@@ -68,10 +68,9 @@ modificar.addEventListener('click',async e=>{
     producto.impuesto = parseFloat(impuesto.value).toFixed(2);
     producto.ganancia = parseFloat(ganancia.value).toFixed(2);
     producto.precio = parseFloat(total.value).toFixed(2);
-    const mensaje = (await axios.put(`${URL}productos/${producto._id}`,producto)).data;
-    alert(mensaje);
+    (await axios.put(`${URL}productos/${producto._id}`,producto)).data;
     ipcRenderer.send('informacion-a-ventana',producto._id);
-    //  window.close();
+    window.close();
 })
 
 codigo.addEventListener('keypress',e=>{

@@ -90,9 +90,11 @@ ipcRenderer.on('informacion',(e,args)=>{
 
 eliminar.addEventListener('click',async e=>{
     if(productoSeleccionado){
-        const mensaje = (await axios.delete(`${URL}productos/${productoSeleccionado.id}`)).data;
-        alert(mensaje);
-        location.reload();
+        if (confirm("Seguro Borrar Producto")) {
+            const mensaje = (await axios.delete(`${URL}productos/${productoSeleccionado.id}`)).data;
+            alert(mensaje);
+            location.reload();
+        }
     }else{
         alert("No se selecciono ningun producto");
     }

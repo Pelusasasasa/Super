@@ -77,10 +77,16 @@ listarVentas = (ventas)=>{
         const hora = fecha.getHours();
         const minutos = fecha.getMinutes();
         let segundos = fecha.getSeconds(); 
-        segundos=segundos<10 ? `0${segundos}` : segundos
+        segundos=segundos<10 ? `0${segundos}` : segundos;
+        tbody.innerHTML += `
+        <tr id="${venta._id}" class="bold">
+            <td>${venta._id}</td><td>${hora}:${minutos}:${segundos}</td><td>${venta.cliente}</td><td></td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
+        </tr>
+        `;
+
         venta.listaProductos.forEach(({cantidad,producto})=>{
             tbody.innerHTML += `
-            <tr>
+            <tr class="none venta${venta._id}">
                 <td>${venta._id}</td>
                 <td>${hora}:${minutos}:${segundos}</td>
                 <td>${venta.cliente ? venta.cliente : "CONSUMIDOR FINAL"}</td>
@@ -91,11 +97,7 @@ listarVentas = (ventas)=>{
             </tr>
         `
         })
-        tbody.innerHTML += `
-            <tr>
-                <td></td><td></td><td></td><td></td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
-            </tr>
-        `
+
         totalVenta+=venta.precio;
     });
     total.value = totalVenta.toFixed(2);
@@ -122,5 +124,13 @@ fecha.addEventListener('keypress',async e=>{
     if ((e.key === "Enter")) {
         const ventas = (await axios.get(`${URL}ventas/dia/${fecha.value}`)).data;
         listarVentas(ventas);
+    }
+});
+
+tbody.addEventListener('click',async e=>{
+    const id = e.target.nodeName === "TD" ? e.target.parentNode.id : e.target.id;
+    const trs = document.querySelectorAll("tbody .venta" + id)
+    for await(let tr of trs){
+        tr.classList.toggle('none');
     }
 })

@@ -10,15 +10,12 @@ const nombre = document.querySelector('#nombre');
 const telefono = document.querySelector('#telefono');
 const localidad = document.querySelector('#localidad');
 const direccion = document.querySelector('#direccion');
-const cond_iva = document.querySelector('#cond_iva');
-const dniCuit = document.querySelector('#dniCuit');
-const observaciones = document.querySelector('#observaciones');
 
 const cantidad = document.querySelector('#cantidad');
 const codBarra = document.querySelector('#cod-barra')
 const descripcion = document.querySelector('#descripcion');
 const precioU = document.querySelector('#precio-U');
-const precioT = document.querySelector('#precio-total');
+const rubro = document.querySelector('#rubro');
 const tbody = document.querySelector('.tbody');
 
 //parte totales
@@ -27,14 +24,21 @@ const descuentoPor = document.querySelector('#descuentoPor');
 const descuento = document.querySelector('#descuento');
 const cobrado = document.querySelector('#cobrado');
 const radio = document.querySelectorAll('input[name="condicion"]');
+const cuentaCorrientediv = document.querySelector('.cuentaCorriente');
 const facturar = document.querySelector('.facturar');
 const borrar = document.querySelector(".borrar");
-
 
 let movimientos = [];
 let totalGlobal = 0;
 
-codigo.addEventListener('keypress',e=>{
+//Por defecto ponemos el A Consumidor Final
+const ponerClienteDefault = async()=>{
+    listarCliente(2)
+};
+
+
+//Buscamos un cliente, si sabemos el codigo directamente apretamos enter
+codigo.addEventListener('keypress',async e=>{
     if (e.key === "Enter") {
         if (codigo.value === "") {
             const opciones = {
@@ -42,6 +46,8 @@ codigo.addEventListener('keypress',e=>{
                 botones:false,
             }
             ipcRenderer.send('abrir-ventana',opciones)
+        }else{
+            listarCliente(codigo.value)
         }
     }
 })
@@ -67,44 +73,37 @@ cantidad.addEventListener('keypress',e=>{
     apretarEnter(e,codBarra)
 })
 let listaProductos = [];
+
 codBarra.addEventListener('keypress',async e=>{
     if(e.key === "Enter" && codBarra.value !== ""){
         listarProducto(codBarra.value);
     }else if(e.key === "Enter" && codBarra.value === ""){
-        descripcion.focus();
-    }
-});
-
-descripcion.addEventListener('keypress',async e=>{
-    if (e.key === "Enter" && codBarra.value === "" && descripcion.value !== "") {
-        const producto = (await axios.get(`${URL}productos/buscar/porNombre/${descripcion.value}`)).data;
-        if(producto !== ""){
-                listarProducto(descripcion.value)
-        }else{
-            precioU.focus();
-        }
-    }else if(e.key === "Enter" && descripcion.value === ""){
         const opciones = {
             path: "./productos/productos.html",
             botones: false
         }
         ipcRenderer.send('abrir-ventana',opciones);
     }
-})
-
+});
 
 precioU.addEventListener('keypress',e=>{
+    rubro.focus();
+});
+
+rubro.addEventListener('keypress',e=>{
     if (e.key === "Enter") {
         const producto = {
-            descripcion:descripcion.value,
+            descripcion:codBarra.value.toUpperCase(),
             precio:parseFloat(precioU.value),
+            rubro:rubro.value
         };
+        console.log(producto)
         listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         tbody.innerHTML += `
         <tr id=${producto._id}>
             <td>${cantidad.value}</td>
-            <td>${codBarra.value}</td>
-            <td>${descripcion.value}</td>
+            <td></td>
+            <td>${codBarra.value.toUpperCase()}</td>
             <td>${precioU.value}</td>
             <td>${(parseFloat(precioU.value) * parseFloat(cantidad.value)).toFixed(2)}</td>
         </tr>
@@ -112,12 +111,9 @@ precioU.addEventListener('keypress',e=>{
 
         total.value = (parseFloat(total.value) + parseFloat(precioU.value) * parseFloat(cantidad.value)).toFixed(2);
         totalGlobal = parseFloat(total.value);
-
         cantidad.value = "1.00";
-        descripcion.value = "";
         codBarra.value = "";
-        precioU.value = "";
-        precioT.value = "";
+        precioU.value = "0.00"
         codBarra.focus();
     }
 })
@@ -190,26 +186,33 @@ facturar.addEventListener('click',async e=>{
     
     //Ponemos en la cuenta conpensada si es CC
      venta.tipo_venta === "CC" && ponerEnCuentaCompensada(venta);
-     venta.tipo_venta === "CC" && ponerEnCuentaHistorica(venta);
+     venta.tipo_venta === "CC" && ponerEnCuentaHistorica(venta,parseFloat(saldo.value));
 
      await axios.post(`${URL}ventas`,venta);
-     location.href = "../menu.html";
+     location.reload();
 })
 
 //Lo que hacemos es listar el cliente traido
 const listarCliente = async(id)=>{
     codigo.value = id;
     const cliente = (await axios.get(`${URL}clientes/id/${id}`)).data;
-    nombre.value = cliente.nombre;
-    saldo.value = cliente.saldo;
-    telefono.value = cliente.telefono;
-    localidad.value = cliente.localidad;
-    codBarra.focus();
+    if (cliente !== "") {
+        nombre.value = cliente.nombre;
+        saldo.value = cliente.saldo;
+        telefono.value = cliente.telefono;
+        localidad.value = cliente.localidad;
+        codBarra.focus();
+        cliente.condicionFacturacion === 1 ? cuentaCorrientediv.classList.remove('none') : cuentaCorrientediv.classList.add('none')
+    }else{
+        alert('Cliente No Existe');
+        codigo.value = "";
+        codigo.focus();
+    }
 };
+ponerClienteDefault();
 
 const ponerEnCuentaCompensada = async(venta)=>{
     const cuenta = {};
-    cuenta._id = (await axios.get(`${URL}compensada`)).data;
     cuenta.cliente = venta.cliente;
     cuenta.idCliente = venta.idCliente;
     cuenta.nro_venta = venta.numero;
@@ -218,18 +221,14 @@ const ponerEnCuentaCompensada = async(venta)=>{
     await axios.post(`${URL}compensada`,cuenta);
 };
 
-const ponerEnCuentaHistorica = async(venta)=>{
+const ponerEnCuentaHistorica = async(venta,saldo)=>{
     const cuenta = {};
-    cuenta._id = (await axios.get(`${URL}historica`)).data;
     cuenta.cliente = venta.cliente;
     cuenta.idCliente = venta.idCliente;
     cuenta.nro_venta = venta.numero;
     cuenta.debe = venta.precio;
-    const cliente = (await axios.get(`${URL}clientes/id/${cuenta.idCliente}`)).data;
-    cuenta.saldo = venta.precio + cliente.saldo;
-    const a = (await axios.post(`${URL}historica`,cuenta)).data;
-    alert(a)
-
+    cuenta.saldo = venta.precio + saldo;
+    (await axios.post(`${URL}historica`,cuenta)).data;
 }
 
 //Cargamos el movimiento de producto a la BD
@@ -247,9 +246,9 @@ const cargarMovimiento = async({cantidad,producto},numero,cliente)=>{
 
 
 //Lo que hacemos es listar el producto traido
-
 const listarProducto =async(id)=>{
-        const producto = (await axios.get(`${URL}productos/${id}`)).data;
+        let producto = (await axios.get(`${URL}productos/${id}`)).data;
+        producto = producto === "" ? (await axios.get(`${URL}productos/buscar/porNombre/${id}`)).data : producto;
         if (producto !== "") {
        const productoYaUsado = listaProductos.find(({producto: product})=>{
            if (product._id === producto._id) {
@@ -259,14 +258,12 @@ const listarProducto =async(id)=>{
         if(producto !== "" && !productoYaUsado){
         listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         codBarra.value = producto._id;
-        descripcion.value = producto.descripcion;
         precioU.value = (producto.precio.toFixed(2));
-        precioT.value = producto.precio * parseFloat(cantidad.value);
         tbody.innerHTML += `
         <tr id=${producto._id}>
             <td>${cantidad.value}</td>
             <td>${codBarra.value}</td>
-            <td>${descripcion.value.toUpperCase()}</td>
+            <td>${producto.descripcion.toUpperCase()}</td>
             <td>${precioU.value}</td>
             <td>${(parseFloat(precioU.value) * parseFloat(cantidad.value)).toFixed(2)}</td>
         </tr>
@@ -281,16 +278,15 @@ const listarProducto =async(id)=>{
             tr.children[4].innerHTML = parseFloat(tr.children[0].innerHTML) * producto.precio;
             total.value = (parseFloat(total.value) + (parseFloat(cantidad.value) * producto.precio)).toFixed(2);
             totalGlobal = parseFloat(total.value);
-        }  
-    }else{
-        alert("El Producto No Existe")
-    }
+        }
         cantidad.value = "1.00";
-        descripcion.value = "";
         codBarra.value = "";
         precioU.value = "";
-        precioT.value = "";
-        codBarra.focus();
+        codBarra.focus();  
+    }else{
+        precioU.focus();
+    }
+        
 
 }
 let seleccionado;
@@ -323,31 +319,39 @@ borrar.addEventListener('click',e=>{
     seleccionado = "";
 });
 
+codigo.addEventListener('focus',e=>{
+    codigo.select();
+});
+
 nombre.addEventListener('focus',e=>{
-    selecciona_value(nombre.id);
-})
+    nombre.select()
+});
 
 localidad.addEventListener('focus',e=>{
-    selecciona_value(localidad.id);
-})
+    localidad.select();
+});
 
 telefono.addEventListener('focus',e=>{
-    selecciona_value(telefono.id);
-})
+    telefono.select();
+});
 
 direccion.addEventListener('focus',e=>{
-    selecciona_value(direccion.id);
-})
+    direccion.select();
+});
 
 descuentoPor.addEventListener('focus',e=>{
-    selecciona_value(descuentoPor.id);
-})
+    descuentoPor.select();
+});
 
 total.addEventListener('focus',e=>{
-    selecciona_value(total.id);
+    total.select();
+});
+
+cantidad.addEventListener('focus',e=>{
+    cantidad.select();
 })
 
 cobrado.addEventListener('focus',e=>{
-    selecciona_value(cobrado.id);
+    cobrado.select();
 });
 

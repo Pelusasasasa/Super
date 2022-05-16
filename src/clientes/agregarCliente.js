@@ -9,7 +9,7 @@ const nombre = document.querySelector('#nombre');
 const localidad = document.querySelector('#localidad');
 const telefono = document.querySelector('#telefono');
 const direccion = document.querySelector('#direccion');
-
+const condicionFacturacion = document.querySelector('#condicionFacturacion');
 const agregar = document.querySelector('.agregar');
 const salir = document.querySelector('.salir');
 
@@ -26,6 +26,7 @@ agregar.addEventListener('click',async e=>{
     cliente.localidad = localidad.value;
     cliente.telefono = telefono.value;
     cliente.direccion = direccion.value;
+    cliente.condicionFacturacion = condicionFacturacion.value;
     const mensaje = (await axios.post(`${URL}clientes`,cliente)).data;
     alert(mensaje);
     window.close();

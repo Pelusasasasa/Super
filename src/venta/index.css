@@ -68,7 +68,7 @@ body {
 
 .parteProductos .buscarProductos{
   display: grid;
-  grid-template-columns: 1fr 1fr 3fr 1fr 1fr;
+  grid-template-columns: 1fr 3fr 1fr 1fr;
 }
 
 .parteProductos .buscarProductos div{
@@ -131,6 +131,27 @@ body {
   border: .1rem solid black;
 }
 
+.condicionVenta{
+  margin-top: 1rem;
+  display: flex;
+}
+
+.condicionVenta div{
+  margin-left: 1rem;
+}
+
+.condicionVenta div label{
+  font-weight: bold;
+}
+
+.condicionVenta input{
+  transform: scale(1.8);
+}
+
+.condicionVenta .none{
+  display: none;
+}
+
 footer{
   display: flex;
   justify-content: space-between;
@@ -152,4 +173,14 @@ footer button:hover{
 .totales{
   display: flex;
   justify-content: space-between;
+}
+
+.totales input{
+  font-size: 1.7rem;
+  padding: 1rem;
+}
+
+.cobrado input{
+  font-size: 1.7rem;
+  padding: 1rem;
 }

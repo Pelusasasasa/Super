@@ -100,6 +100,7 @@ actualizar.addEventListener('click',async e=>{
         const cuentaCompensada = (await axios.get(`${URL}compensada/traerCompensada/id/${trSeleccionado.id}`)).data;
         const cuentaHistorica = (await axios.get(`${URL}historica/PorId/id/${trSeleccionado.id}`)).data;
         const movimientos = (await axios.get(`${URL}movimiento/${trSeleccionado.id}`)).data;
+        const venta = (await axios.get(`${URL}ventas/id/${trSeleccionado.id}`)).data;
         const  cliente = (await axios.get(`${URL}clientes/id/${cuentaCompensada.idCliente}`)).data;
         let total = 0;
         for await(let movimiento of movimientos){
@@ -127,6 +128,7 @@ actualizar.addEventListener('click',async e=>{
             };
             cliente.saldo += cuentaCompensada.importe;
             await axios.put(`${URL}clientes/id/${cliente._id}`,cliente);
+            await axios.put(`${URL}ventas/id/${venta._id}`,venta);
             await axios.put(`${URL}compensada/traerCompensada/id/${cuentaCompensada._id}`,cuentaCompensada);
             await axios.put(`${URL}historica/PorId/id/${cuentaHistorica._id}`,cuentaHistorica);
         }
