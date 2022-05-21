@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,Menu } = require('electron');
 const { ipcMain } = require('electron/main');
 const path = require('path');
 var isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
@@ -21,10 +21,12 @@ const createWindow = () => {
       contextIsolation: false,
     }
   });
-  ventanaPrincipal.maximize()
+  ventanaPrincipal.maximize();
 
   // and load the index.html of the app.
   ventanaPrincipal.loadFile(path.join(__dirname, 'menu.html'));
+
+  hacerMenu();
 };
 
 app.on('ready', createWindow);
@@ -47,18 +49,23 @@ ipcMain.on('enviar',(e,args)=>{
 
 
 ipcMain.on('abrir-ventana',(e,args)=>{
-  abrirVentana(args.path,700,1200)
+  abrirVentana(args.path,args.altura,args.ancho)
   nuevaVentana.on('ready-to-show',async()=>{
     nuevaVentana.webContents.send('informacion',args)
   })
+});
+
+ipcMain.on('enviar-ventana-principal',(e,args)=>{
+  ventanaPrincipal.webContents.send('recibir-ventana-secundaria',JSON.stringify(args));
 })
 
 
 let nuevaVentana;
-const abrirVentana = (direccion,altura,ancho)=>{
+const abrirVentana = (direccion,altura = 700,ancho = 1200)=>{
   nuevaVentana = new BrowserWindow({
     height: altura,
     width: ancho,
+    modal:true,
     parent:ventanaPrincipal,
     webPreferences:{
       nodeIntegration: true,
@@ -67,11 +74,40 @@ const abrirVentana = (direccion,altura,ancho)=>{
   });
 
   nuevaVentana.loadFile(path.join(__dirname, `${direccion}`));
-
-
+  nuevaVentana.setMenuBarVisibility(false)
+  nuevaVentana.on('close',async()=>{
+    if (direccion === "./clientes/agregarCliente.html") {
+      ventanaPrincipal.reload()
+    }
+  })
   // nuevaVentana.setMenuBarVisibility(false);
 }
 
 ipcMain.on('informacion-a-ventana',(e,args)=>{
   ventanaPrincipal.webContents.send('informacion-a-ventana',JSON.stringify(args));
 })
+
+const hacerMenu = () => {
+  //Hacemos el menu
+
+  const template = [
+
+    {
+      label: "Venta Rapida",
+      click(){
+         (abrirVentana("ventaRapida/ventaRapida.html",500,400))
+        }
+    },
+    {
+      label:"",
+      accelerator: process.platform == "darwin" ? "Comand+D" : "Ctrl+D",
+      click(item,focusedWindow){
+        focusedWindow.toggleDevTools(); 
+      }
+    }
+
+  ];
+
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+}

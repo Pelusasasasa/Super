@@ -1,7 +1,23 @@
+const { ipcRenderer } = require("electron/renderer");
+
 document.addEventListener('keyup',e=>{
     console.log(e.keyCode)
     if (e.keyCode === 112) {
         location.href = "./venta/index.html"
+    }else if(e.keyCode === 113){
+        const opciones = {
+            path:"ventaRapida/ventaRapida.html",
+            ancho:500,
+            altura:600
+        }
+        ipcRenderer.send('abrir-ventana',opciones)
+    }else if(e.keyCode === 114){
+        const opciones = {
+            path:"productos/cambioStock.html",
+            ancho:500,
+            altura:500
+        };
+        ipcRenderer.send('abrir-ventana',opciones)
     }
 })
 

@@ -107,7 +107,7 @@ actualizar.addEventListener('click',async e=>{
             const precio = (await axios.get(`${URL}productos/traerPrecio/${movimiento.codProd}`)).data;
             movimiento.precio = precio;
             total += (precio*movimiento.cantidad);
-        }
+        };
 
         if (confirm("Grabar Importe")) {
             total = parseFloat(total.toFixed(2));
@@ -127,6 +127,7 @@ actualizar.addEventListener('click',async e=>{
                 await axios.put(`${URL}historica/PorId/id/${cuenta._id}`,cuenta);
             };
             cliente.saldo += cuentaCompensada.importe;
+            await axios.put(`${URL}movimiento`,movimientos);
             await axios.put(`${URL}clientes/id/${cliente._id}`,cliente);
             await axios.put(`${URL}ventas/id/${venta._id}`,venta);
             await axios.put(`${URL}compensada/traerCompensada/id/${cuentaCompensada._id}`,cuentaCompensada);

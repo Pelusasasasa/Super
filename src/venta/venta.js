@@ -113,7 +113,7 @@ rubro.addEventListener('keypress',e=>{
         totalGlobal = parseFloat(total.value);
         cantidad.value = "1.00";
         codBarra.value = "";
-        precioU.value = "0.00"
+        precioU.value = ""
         codBarra.focus();
     }
 })

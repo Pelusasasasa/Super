@@ -11,6 +11,17 @@ const axios = require('axios');
 const { ipcRenderer } = require('electron/renderer');
 require('dotenv').config()
 const URL = process.env.URL;
+
+ipcRenderer.on('recibir-ventana-secundaria',(e,args)=>{
+    const clienteModificado = JSON.parse(args);
+    const tr = document.getElementById(`${clienteModificado._id}`);
+    tr.children[0].innerHTML = clienteModificado._id;
+    tr.children[1].innerHTML = clienteModificado.nombre;
+    tr.children[2].innerHTML = clienteModificado.direccion;
+    tr.children[3].innerHTML = clienteModificado.telefono;
+    tr.children[4].innerHTML = clienteModificado.saldo;
+})
+
 let ventanaSecundaria = false
 let seleccionado
 

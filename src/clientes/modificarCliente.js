@@ -73,6 +73,7 @@ modificar.addEventListener('click',async e=>{
     cliente.condicionFacturacion = condicionFacturacion.value;
     const mensaje = (await axios.put(`${URL}clientes/id/${cliente._id}`,cliente)).data;
     alert(mensaje);
+    ipcRenderer.send('enviar-ventana-principal',cliente);
     window.close();
 })
 
