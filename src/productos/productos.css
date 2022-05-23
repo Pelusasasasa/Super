@@ -138,13 +138,13 @@ button:hover{
 
 /* Nuevo Stock */
 
-.nuevoStock inputs{
+.nuevoStock,.nuevoPrecio input{
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.nuevoStock main{
+.nuevoStock,.nuevoPrecio main{
     margin: 2rem 0;
     width: 100%;
     display: flex;
@@ -153,16 +153,16 @@ button:hover{
     align-items: center;
 }
 
-.nuevoStock main input{
+.nuevoStock,.nuevoPrecio main input{
     width: 60%;
     text-align: end;
 }
 
-.nuevoStock .botones{
+.nuevoStock,.nuevoPrecio .botones{
     margin: 5rem;
 }
 
 
-.nuevoStock .botones button{
+.nuevoStock,.nuevoPrecio .botones button{
     font-size: 2rem;
 }

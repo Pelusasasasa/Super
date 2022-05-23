@@ -1,6 +1,7 @@
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
+console.log(process.env);
 const { ipcRenderer } = require('electron/renderer');
 const {cerrarVentana,apretarEnter, selecciona_value} = require('../helpers');
 
@@ -33,7 +34,7 @@ let totalGlobal = 0;
 
 //Por defecto ponemos el A Consumidor Final
 const ponerClienteDefault = async()=>{
-    listarCliente(2)
+    listarCliente(1)
 };
 
 

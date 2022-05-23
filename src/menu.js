@@ -10,14 +10,21 @@ document.addEventListener('keyup',e=>{
             ancho:500,
             altura:600
         }
-        ipcRenderer.send('abrir-ventana',opciones)
+        ipcRenderer.send('abrir-ventana',opciones);
     }else if(e.keyCode === 114){
         const opciones = {
             path:"productos/cambioStock.html",
             ancho:500,
             altura:500
         };
-        ipcRenderer.send('abrir-ventana',opciones)
+        ipcRenderer.send('abrir-ventana',opciones);
+    }else if(e.keyCode=== 115){
+        const opciones = {
+            path: "productos/cambioPrecio.html",
+            ancho:500,
+            altura:500,
+        }
+        ipcRenderer.send('abrir-ventana',opciones);
     }
 })
 

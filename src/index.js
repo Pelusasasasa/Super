@@ -3,6 +3,7 @@ const { ipcMain } = require('electron/main');
 const path = require('path');
 var isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
 
+
 if (isDev) {
     require('electron-reload')(__dirname, {
         electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
@@ -97,6 +98,18 @@ const hacerMenu = () => {
       click(){
          (abrirVentana("ventaRapida/ventaRapida.html",500,400))
         }
+    },
+    {
+      label: "Cambio de Stock",
+      click(){
+        abrirVentana("productos/cambioStock.html",500,400)
+      }
+    },
+    {
+      label: "Cambio de Precio",
+      click(){
+        abrirVentana("productos/cambioPrecio.html",500,400)
+      }
     },
     {
       label:"",

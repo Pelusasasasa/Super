@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./productos.css">
+    <title>Cambio Precio</title>
+</head>
+<body class="nuevoPrecio">
+    <section class="inputs">
+        <main>
+            <label for="codigo">Codigo</label>
+            <input type="text" name="codigo" autofocus id="codigo">
+        </main>
+        <main>
+            <label for="costo">Costo</label>
+            <input type="number" name="costo" disabled id="costo">
+        </main>
+        <main>
+            <label for="nuevoCosto">Nuevo Costo</label>
+            <input type="Number" name="nuevoCosto" id="nuevoCosto">
+        </main>
+
+        <main>
+            <label for="nuevoPrecio">Nuevo Precio</label>
+            <input type="Number" name="nuevoPrecio" disabled id="nuevoPrecio">
+        </main>
+    </section>
+
+    <section class="botones">
+        <button class="guardar">Guardar</button>
+        <button class="salir">Salir</button>
+    </section>
+</body>
+<script src="./cambioPrecio.js"></script>
+</html>
