@@ -69,12 +69,19 @@ direccion.addEventListener('keypress',e=>{
 })
 
 
-cantidad.addEventListener('keypress',e=>{
+cantidad.addEventListener('keypress',async e=>{
     apretarEnter(e,codBarra)
 })
+
+cantidad.addEventListener('keydown',e=>{
+    if(e.keyCode === 39){
+        codBarra.focus();
+    }
+});
+
 let listaProductos = [];
 
-codBarra.addEventListener('keypress',async e=>{
+codBarra.addEventListener('keydown',async e=>{
     if(e.key === "Enter" && codBarra.value !== ""){
         listarProducto(codBarra.value);
     }else if(e.key === "Enter" && codBarra.value === ""){
@@ -83,6 +90,12 @@ codBarra.addEventListener('keypress',async e=>{
             botones: false
         }
         ipcRenderer.send('abrir-ventana',opciones);
+    }
+});
+
+codBarra.addEventListener('keyup',e=>{
+    if(e.keyCode === 37){
+        cantidad.focus();
     }
 });
 
@@ -150,7 +163,7 @@ cobrado.addEventListener('keydown',e=>{
 //traemos el id de la nueva venta
 const traerIdVenta = async()=>{
     const id = (await axios.get(`${URL}ventas`)).data;
-    return id
+    return id;
 };
 
 //Vemos que input tipo radio esta seleccionado
@@ -267,7 +280,6 @@ const listarProducto =async(id)=>{
             <td>${precioU.value}</td>
             <td>${(parseFloat(precioU.value) * parseFloat(cantidad.value)).toFixed(2)}</td>
         </tr>
-        
     `;
         total.value = (parseFloat(total.value) + (parseFloat(cantidad.value) * parseFloat(precioU.value))).toFixed(2);
         totalGlobal = parseFloat(total.value);
@@ -275,7 +287,7 @@ const listarProducto =async(id)=>{
             productoYaUsado.cantidad += parseFloat(cantidad.value)
             const tr = document.getElementById(producto._id);
             tr.children[0].innerHTML = (parseFloat(tr.children[0].innerHTML) + parseFloat(cantidad.value)).toFixed(2);
-            tr.children[4].innerHTML = parseFloat(tr.children[0].innerHTML) * producto.precio;
+            tr.children[4].innerHTML = (parseFloat(tr.children[0].innerHTML) * producto.precio).toFixed(2);
             total.value = (parseFloat(total.value) + (parseFloat(cantidad.value) * producto.precio)).toFixed(2);
             totalGlobal = parseFloat(total.value);
         }
@@ -355,3 +367,10 @@ cobrado.addEventListener('focus',e=>{
     cobrado.select();
 });
 
+document.addEventListener('keydown',e=>{
+    if (e.key === "Escape") {
+        if (confirm("Cancelar Venta?")) {
+            location.href = "../menu.html" ;
+        };
+    };
+})

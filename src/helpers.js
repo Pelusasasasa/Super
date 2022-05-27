@@ -8,9 +8,9 @@ funciones.cerrarVentana = (e)=>{
         }
 }
 
-funciones.apretarEnter = (e,input)=>{
+funciones.apretarEnter = async (e,input)=>{
     if(e.key === "Enter"){
-        input.focus()
+        input.focus();
     }
 }
 

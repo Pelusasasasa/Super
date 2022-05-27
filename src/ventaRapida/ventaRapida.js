@@ -12,12 +12,15 @@ const salir = document.querySelector('.salir');
 
 facturar.addEventListener('click',async e=>{
     const venta = {};
+    venta._id = await traerIdVenta();
+    venta.numero = venta._id;
     venta.precio = precio.value;
     venta.fecha = new Date();
     venta.idCliente = 1;
-    venta.cliente = "Consumidor Final";
+    venta.cliente = "CONSUMIDOR FINAL";
     venta.tipo_venta = "CD";
-    await axios.post(`${URL}ventas`);
+    await axios.post(`${URL}ventas`,venta);
+    window.close();
 })
 
 descripcion.addEventListener('keypress',e=>{
@@ -38,3 +41,10 @@ document.addEventListener('keyup',e=>{
         window.close();
     }
 });
+
+
+//traemos el id de la nueva venta
+const traerIdVenta = async()=>{
+    const id = (await axios.get(`${URL}ventas`)).data;
+    return id;
+};

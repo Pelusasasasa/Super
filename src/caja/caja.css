@@ -77,6 +77,10 @@ table{
   border-collapse: collapse;
 }
 
+.bold:hover{
+  cursor: pointer;
+}
+
 table thead th{
   border: .1rem solid;
 }
