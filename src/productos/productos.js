@@ -72,7 +72,12 @@ modificar.addEventListener('click',e=>{
 })
 
 ipcRenderer.on('informacion-a-ventana',(e,args)=>{
-    console.log(JSON.parse(args))
+    const producto = JSON.parse(args);
+    const trModificado = document.getElementById(producto._id);
+    trModificado.children[1].innerHTML = producto.descripcion;
+    trModificado.children[2].innerHTML = producto.precio;
+    trModificado.children[3].innerHTML = producto.stock;
+    trModificado.children[4].innerHTML = producto.marca;
 })
 
 ipcRenderer.on('informacion',(e,args)=>{

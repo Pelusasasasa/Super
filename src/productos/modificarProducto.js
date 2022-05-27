@@ -69,7 +69,7 @@ modificar.addEventListener('click',async e=>{
     producto.ganancia = parseFloat(ganancia.value).toFixed(2);
     producto.precio = parseFloat(total.value).toFixed(2);
     (await axios.put(`${URL}productos/${producto._id}`,producto));
-    ipcRenderer.send('informacion-a-ventana',producto._id);
+    await ipcRenderer.send('informacion-a-ventana',producto);
     window.close();
 })
 

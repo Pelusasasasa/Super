@@ -1,8 +1,7 @@
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
-console.log(process.env);
-const { ipcRenderer } = require('electron/renderer');
+const { ipcRenderer } = require('electron');
 const {cerrarVentana,apretarEnter, selecciona_value} = require('../helpers');
 
 //Parte Cliente
@@ -168,8 +167,8 @@ const verTipoVenta = ()=>{
 
 facturar.addEventListener('click',async e=>{
     const venta = {};
-    venta._id = await traerIdVenta();
     venta.cliente = nombre.value;
+    venta._id = await traerIdVenta();
     venta.idCliente = codigo.value;
     venta.numero = venta._id;
     venta.precio = parseFloat(total.value);
