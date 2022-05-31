@@ -22,6 +22,16 @@ body {
     display: flex;
     justify-content: space-around;
 }
+.buscador .inputs{
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap: 2rem
+}
+
+.buscador .inputs main {
+    display: flex;
+    flex-direction: column;
+}
 
 .buscador button{
     border:  none;

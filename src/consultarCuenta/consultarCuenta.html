@@ -9,15 +9,21 @@
 </head>
 <body class="consultaCuenta">
         <section class="buscador">
-            <main class="">
-                <label for="buscar">Buscar cliente</label>
-                <input type="text" id="buscar" autofocus name="buscar">
-            </main>
-
-            <main class="saldo">
-                <label for="saldo">saldo</label>
-                <input type="text" id="saldo" name="saldo">
-            </main>
+            <section class="inputs">
+                <main class="">
+                    <label for="buscar">Buscar cliente</label>
+                    <input type="text" id="buscar" autofocus name="buscar">
+                </main>
+                <main>
+                    <label for="cliente">Cliente</label>
+                    <input type="text" name="cliente" disabled id="cliente">
+                </main>
+    
+                <main class="saldo">
+                    <label for="saldo">Saldo</label>
+                    <input type="text" disabled id="saldo" name="saldo">
+                </main>
+            </section>
 
             <button class="actualizar">Actualizar</button>
 
