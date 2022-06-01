@@ -1,4 +1,5 @@
-const { ipcRenderer } = require("electron/renderer");
+const { ipcRenderer } = require("electron");
+const swal = require('sweetalert2');
 
 document.addEventListener('keyup',e=>{
     console.log(e.keyCode)

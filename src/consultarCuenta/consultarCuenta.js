@@ -67,9 +67,9 @@ const listarVentas = async(lista)=>{
         month = month === 13 ? 1 : month;
 
         tbodyVenta.innerHTML += `
-            <tr id="${venta._id}">
+            <tr id="${venta.nro_venta}">
                 <td>${day}/${month}/${year}</td>
-                <td>${venta._id}</td>
+                <td>${venta.nro_venta}</td>
                 <td>${venta.idCliente}</td>
                 <td>${venta.cliente}</td>
                 <td>${venta.importe}</td>
@@ -154,8 +154,9 @@ actualizar.addEventListener('click',async e=>{
             await axios.put(`${URL}movimiento`,movimientos);
             await axios.put(`${URL}clientes/id/${cliente._id}`,cliente);
             await axios.put(`${URL}ventas/id/${venta._id}`,venta);
-            await axios.put(`${URL}compensada/traerCompensada/id/${cuentaCompensada._id}`,cuentaCompensada);
-            await axios.put(`${URL}historica/PorId/id/${cuentaHistorica._id}`,cuentaHistorica);
+            await axios.put(`${URL}compensada/traerCompensada/id/${cuentaCompensada.nro_venta}`,cuentaCompensada);
+            console.log(cuentaHistorica)
+            await axios.put(`${URL}historica/PorId/id/${cuentaHistorica.nro_venta}`,cuentaHistorica);
             const cuentaModificada = (await axios.get(`${URL}compensada/traerCompensada/id/${trSeleccionado.id}`)).data;
             listarProductos(movimientos)
             trSeleccionado.children[4].innerHTML = cuentaModificada.importe;

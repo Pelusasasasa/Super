@@ -1,4 +1,5 @@
 const axios  = require("axios");
+const { cerrarVentana } = require("../helpers");
 require("dotenv").config();
 const URL = process.env.URL;
 
@@ -70,6 +71,7 @@ inicia( )
 
 
 listarVentas = (ventas)=>{
+    ventas = ventas.filter(venta=>venta.tipo_venta === "CD")
     tbody.innerHTML = ``;
     let totalVenta = 0;
     ventas.forEach(venta => {
@@ -132,5 +134,11 @@ tbody.addEventListener('click',async e=>{
     const trs = document.querySelectorAll("tbody .venta" + id)
     for await(let tr of trs){
         tr.classList.toggle('none');
+    }
+});
+
+document.addEventListener('keyup',e=>{
+    if (e.key === "Escape") {
+        location.href = '../menu.html';
     }
 })

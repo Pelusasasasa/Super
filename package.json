@@ -47,7 +47,8 @@
   "dependencies": {
     "axios": "^0.26.1",
     "electron-reload": "^2.0.0-alpha.1",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "sweetalert2": "^11.4.17"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.63",

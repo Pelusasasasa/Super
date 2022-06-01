@@ -1,6 +1,7 @@
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
+const swal = require('sweetalert2');
 const { ipcRenderer } = require('electron');
 const {cerrarVentana,apretarEnter, selecciona_value} = require('../helpers');
 
@@ -217,7 +218,7 @@ const listarCliente = async(id)=>{
         codBarra.focus();
         cliente.condicionFacturacion === 1 ? cuentaCorrientediv.classList.remove('none') : cuentaCorrientediv.classList.add('none')
     }else{
-        alert('Cliente No Existe');
+        await swal.fire('Cliente No Existe');
         codigo.value = "";
         codigo.focus();
     }
