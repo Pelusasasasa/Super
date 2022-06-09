@@ -17,6 +17,12 @@ const descuento = document.querySelector('.descuento');
 const total = document.querySelector('.total');
 const tipoVenta = document.querySelector('.tipoVenta');
 
+//En caso de recibo
+const cantidadPrecio = document.querySelector('.cantidadPrecio');
+const iva = document.querySelector('.iva');
+const pagado = document.querySelector('.pagado');
+const descripcion = document.querySelector('.descripcion');
+
 ipcRenderer.on('imprimir',(e,args)=>{
     const [venta,cliente,listado] = JSON.parse(args);
     listar(venta,cliente,listado);
@@ -44,22 +50,38 @@ const listar = async(venta,clienteTraido,lista)=>{
     cliente.innerHTML = venta.cliente;
     direccion.innerHTML = clienteTraido.direccion;
 
-    for await(const {cantidad,producto} of lista){
-
-        listado.innerHTML += `
-            <main class = "linea">
-                <p>${cantidad.toFixed(2)}/${producto.precio.toFixed(2)}</p>
-                <p>(${producto.impuesto.toFixed(2)})</p>
-                <p></p>
-            </main>
-            <main>
-                <p>${producto.descripcion}</p>
-                <p>${(producto.precio * cantidad).toFixed(2)}</p>
-            </main>
-        `
+    if (venta.tipo_comp === "Recibo") {
+        cantidadPrecio.innerHTML = "Fecha";
+        iva.innerHTML = "Comprobante";
+        pagado.innerHTML = "Pagado";
+        descripcion.classList.add('none')
+    }
+    for await(const elem of lista){
+        if (venta.tipo_comp === "Comprobante") {
+            const {objeto,cantidad} = elem;
+            listado.innerHTML += `
+                <main class = "linea">
+                    <p>${cantidad.toFixed(2)}/${producto.precio.toFixed(2)}</p>
+                    <p>(${producto.impuesto.toFixed(2)})</p>
+                    <p></p>
+                </main>
+                <main>
+                    <p>${producto.descripcion}</p>
+                    <p>${(producto.precio * cantidad).toFixed(2)}</p>
+                </main>
+            `   
+        }else{
+            listado.innerHTML += `
+                <main>
+                    <p>${elem.fecha}</p>
+                    <p>${elem.comprobante.toString().padStart(8,'0')}</p>
+                    <p>${elem.pagado.toFixed(2)}</p>
+                </main>
+            `
+        }
     };
-
+    console.log(venta)
     descuento.innerHTML = venta.descuento.toFixed(2);
     total.innerHTML = venta.precio.toFixed(2);
-    tipoVenta.innerHTML = venta.tipo_venta === "CD" ? `Contado: $${venta.precio.toFixed(2)}` : "Cuenta Corriente"
+    tipoVenta.innerHTML = venta.tipo_venta !== "CC" ? `Contado: $${venta.precio.toFixed(2)}` : "Cuenta Corriente"
 }

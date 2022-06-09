@@ -65,11 +65,13 @@ ipcMain.on('imprimir',(e,args)=>{
   abrirVentana("ticket/ticket.html",800,500);
   nuevaVentana.webContents.on('did-finish-load',function() {
     nuevaVentana.webContents.send('imprimir',JSON.stringify(args));
-    nuevaVentana.webContents.print({silent:true,devineName:"SAM4S GIANT-100"},(success,errorType)=>{
+    nuevaVentana.webContents.print({silent:true,deviceName:"SAM4S GIANT-100"},(success,errorType)=>{
       if (success) {
-        
+        ventanaPrincipal.focus();
+        nuevaVentana.close();
       }else{
-
+        ventanaPrincipal.focus();
+        nuevaVentana && nuevaVentana.close();
       };
     });
   });

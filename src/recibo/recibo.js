@@ -153,16 +153,33 @@ inputSeleccionado.addEventListener('keypress',e=>{
 
 imprimir.addEventListener('click',async e=>{
     const recibo = {};
+    recibo.fecha = new Date();
     recibo._id = (await axios.get(`${URL}recibo`)).data;
     recibo.cliente = nombre.value;
     recibo.idCliente = codigo.value;
+    const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
     recibo.numero = recibo._id;
+    recibo.tipo_comp = "Recibo";
+    recibo.descuento = 0;
     recibo.precio = parseFloat(total.value);
-    await modificarCuentaCompensadas();
-    await ponerEnCuentaHistorica(recibo);
-    await descontarSaldoCliente(recibo.idCliente,recibo.precio);
-    await axios.post(`${URL}recibo`,recibo);
-    location.href = "../menu.html";
+    // await modificarCuentaCompensadas();
+    // await ponerEnCuentaHistorica(recibo);
+    // await descontarSaldoCliente(recibo.idCliente,recibo.precio);
+    // await axios.post(`${URL}recibo`,recibo);
+    const lista = [];
+    const trs = document.querySelectorAll('tbody tr');
+    for await(let tr of trs){
+        if (parseFloat(tr.children[4].children[0].value) !== 0 && tr.children[4].children[0].value !== "") {
+            const venta = {};
+            venta.fecha = tr.children[0].innerHTML;
+            venta.comprobante = tr.children[1].innerHTML;
+            venta.pagado = parseFloat(tr.children[3].innerHTML) + parseFloat(tr.children[4].children[0].value)
+            lista.push(venta);   
+        }
+    }
+    console.log(lista)
+    ipcRenderer.send('imprimir',[recibo,cliente,lista])
+    //location.href = "../menu.html";
 });
 
 

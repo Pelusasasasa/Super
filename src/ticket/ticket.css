@@ -70,3 +70,7 @@ img{
 .text-big{
     font-size: 2rem;
 }
+
+.none{
+    display: none;
+}
