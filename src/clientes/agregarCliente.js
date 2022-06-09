@@ -1,4 +1,6 @@
 const {cerrarVentana,apretarEnter} = require('../helpers');
+const sweal = require('sweetalert2');
+
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
@@ -28,7 +30,9 @@ agregar.addEventListener('click',async e=>{
     cliente.direccion = direccion.value;
     cliente.condicionFacturacion = condicionFacturacion.value;
     const mensaje = (await axios.post(`${URL}clientes`,cliente)).data;
-    alert(mensaje);
+    await sweal.fire({
+        title:mensaje
+    });
     window.close();
 })
 

@@ -162,10 +162,10 @@ imprimir.addEventListener('click',async e=>{
     recibo.tipo_comp = "Recibo";
     recibo.descuento = 0;
     recibo.precio = parseFloat(total.value);
-    // await modificarCuentaCompensadas();
-    // await ponerEnCuentaHistorica(recibo);
-    // await descontarSaldoCliente(recibo.idCliente,recibo.precio);
-    // await axios.post(`${URL}recibo`,recibo);
+    await modificarCuentaCompensadas();
+    await ponerEnCuentaHistorica(recibo);
+    await descontarSaldoCliente(recibo.idCliente,recibo.precio);
+    await axios.post(`${URL}recibo`,recibo);
     const lista = [];
     const trs = document.querySelectorAll('tbody tr');
     for await(let tr of trs){
@@ -179,7 +179,7 @@ imprimir.addEventListener('click',async e=>{
     }
     console.log(lista)
     ipcRenderer.send('imprimir',[recibo,cliente,lista])
-    //location.href = "../menu.html";
+    location.href = "../menu.html";
 });
 
 

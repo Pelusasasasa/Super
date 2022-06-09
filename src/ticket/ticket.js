@@ -15,7 +15,6 @@ const listado = document.querySelector('.listado');
 //totales
 const descuento = document.querySelector('.descuento');
 const total = document.querySelector('.total');
-const tipoVenta = document.querySelector('.tipoVenta');
 
 //En caso de recibo
 const cantidadPrecio = document.querySelector('.cantidadPrecio');
@@ -58,16 +57,15 @@ const listar = async(venta,clienteTraido,lista)=>{
     }
     for await(const elem of lista){
         if (venta.tipo_comp === "Comprobante") {
-            const {objeto,cantidad} = elem;
+            const {producto,cantidad} = elem;
             listado.innerHTML += `
-                <main class = "linea">
-                    <p>${cantidad.toFixed(2)}/${producto.precio.toFixed(2)}</p>
-                    <p>(${producto.impuesto.toFixed(2)})</p>
-                    <p></p>
-                </main>
                 <main>
                     <p>${producto.descripcion}</p>
                     <p>${(producto.precio * cantidad).toFixed(2)}</p>
+                </main>
+                <main class = "linea">
+                    <p>${cantidad.toFixed(2)}/${producto.precio.toFixed(2)}</p>
+                    <p></p>
                 </main>
             `   
         }else{
@@ -80,8 +78,6 @@ const listar = async(venta,clienteTraido,lista)=>{
             `
         }
     };
-    console.log(venta)
     descuento.innerHTML = venta.descuento.toFixed(2);
     total.innerHTML = venta.precio.toFixed(2);
-    tipoVenta.innerHTML = venta.tipo_venta !== "CC" ? `Contado: $${venta.precio.toFixed(2)}` : "Cuenta Corriente"
 }

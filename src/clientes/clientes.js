@@ -1,3 +1,9 @@
+const sweal = require('sweetalert2');
+const axios = require('axios');
+const { ipcRenderer } = require('electron');
+require('dotenv').config()
+const URL = process.env.URL;
+
 const agregar = document.querySelector('.agregar');
 const nombre = document.querySelector('#nombre');
 const botones = document.querySelector('.botones');
@@ -5,12 +11,6 @@ const modificar = document.querySelector('.modificar');
 const eliminar = document.querySelector('.eliminar');
 const salir = document.querySelector('.salir');
 const tbody = document.querySelector('tbody');
-
-
-const axios = require('axios');
-const { ipcRenderer } = require('electron/renderer');
-require('dotenv').config()
-const URL = process.env.URL;
 
 ipcRenderer.on('recibir-ventana-secundaria',(e,args)=>{
     const clienteModificado = JSON.parse(args);
@@ -40,16 +40,20 @@ agregar.addEventListener('click',e=>{
     ipcRenderer.send('abrir-ventana',{path:"./clientes/agregarCliente.html"});
 })
 modificar.addEventListener('click',e=>{
-    seleccionado ? ipcRenderer.send('abrir-ventana',{path:"clientes/modificarCliente.html",informacion:seleccionado.id}) : alert("Cliente no seleccionado");
+    seleccionado ? ipcRenderer.send('abrir-ventana',{path:"clientes/modificarCliente.html",informacion:seleccionado.id}) : sweal.fire({title:"Cliente no seleccionado"});
 
 })
 eliminar.addEventListener('click',async e=>{
     if (seleccionado) {
         const mensaje = (await axios.delete(`${URL}clientes/id/${seleccionado.id}`)).data;
-        alert(mensaje);
+        await sweal.fire({
+            title:mensaje
+        });
         location.reload();
     }else{
-        alert("Cliente no seleccionado");
+        await sweal.fire({
+            title:"Cliente no seleccionado"
+        });
     }
 })
 

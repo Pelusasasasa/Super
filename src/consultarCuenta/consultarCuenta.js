@@ -1,3 +1,4 @@
+const sweal = require('sweetalert2');
 const {cerrarVentana,apretarEnter} = require('../helpers');
 const axios = require('axios');
 const { ipcRenderer } = require('electron/renderer');
@@ -22,7 +23,7 @@ buscar.addEventListener('keypress',async e=>{
             saldo.value = (cliente.saldo).toFixed(2);
             clienteInput.value = cliente.nombre;
             if (cliente === "") {
-                alert("Cliente no encontrado");
+                sweal.fire({title:"Cliente no encontrado"});
                 buscar.value = "";
                 buscar.focus();
             }else{
