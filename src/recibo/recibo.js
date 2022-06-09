@@ -3,6 +3,7 @@ require("dotenv").config();
 const URL = process.env.URL;
 const { ipcRenderer } = require('electron');
 const {apretarEnter,selecciona_value} = require('../helpers');
+const swal = require('sweetalert2');
 
 const codigo = document.querySelector('#codigo');
 const nombre = document.querySelector('#nombre');
@@ -48,13 +49,17 @@ cancelar.addEventListener('click',e=>{
     location.href = "../menu.html";
 })
 
-codigo.addEventListener('keypress',e=>{
+codigo.addEventListener('keypress', async e=>{
     if (e.key === "Enter") {
-        const options = {
-            path:"./clientes/clientes.html",
-            botones:false,
+        if (codigo.value != "") {
+            ponerInputs(codigo.value)
+        }else{
+            const options = {
+                path:"./clientes/clientes.html",
+                botones:false,
+            }
+            ipcRenderer.send('abrir-ventana',options);
         }
-        ipcRenderer.send('abrir-ventana',options);
     }
 });
 
@@ -66,15 +71,25 @@ ipcRenderer.on('recibir',(e,args)=>{
 
 const ponerInputs = async(id)=>{
     const cliente = (await axios.get(`${URL}clientes/id/${id}`)).data;
-    codigo.value = cliente._id;
-    nombre.value = cliente.nombre;
-    saldo.value = (cliente.saldo).toFixed(2);
-    localidad.value = cliente.localidad;
-    direccion.value = cliente.direccion;
-    const compensadas = (await axios.get(`${URL}compensada/traerCompensadas/${cliente._id}`)).data;
-    compensadas.forEach(compensada => {
-        ponerVenta(compensada);
-    });
+    if (cliente !== "") {
+        codigo.value = cliente._id;
+        nombre.value = cliente.nombre;
+        saldo.value = (cliente.saldo).toFixed(2);
+        localidad.value = cliente.localidad;
+        direccion.value = cliente.direccion;
+        const compensadas = (await axios.get(`${URL}compensada/traerCompensadas/${cliente._id}`)).data;
+        compensadas.forEach(compensada => {
+            ponerVenta(compensada);
+        });
+    }else{
+        await swal.fire("Cliente no encontrado");
+        codigo.value = "";
+        nombre.value = "";
+        saldo.value = "";
+        localidad.value = "";
+        direccion.value = "";
+        tbody.innerHTML = "";
+    }
 }
 
 
@@ -145,7 +160,7 @@ imprimir.addEventListener('click',async e=>{
     recibo.precio = parseFloat(total.value);
     await modificarCuentaCompensadas();
     await ponerEnCuentaHistorica(recibo);
-    descontarSaldoCliente(recibo.idCliente,recibo.precio);
+    await descontarSaldoCliente(recibo.idCliente,recibo.precio);
     await axios.post(`${URL}recibo`,recibo);
     location.href = "../menu.html";
 });
@@ -177,7 +192,6 @@ const modificarCuentaCompensadas = async()=>{
 
 const ponerEnCuentaHistorica = async(recibo)=>{
     const cuenta = {};
-    cuenta._id = (await axios.get(`${URL}historica`)).data;
     cuenta.idCliente = recibo.idCliente;
     cuenta.cliente = recibo.cliente;
     cuenta.nro_venta = recibo.numero;
@@ -185,4 +199,4 @@ const ponerEnCuentaHistorica = async(recibo)=>{
     const cliente = (await axios.get(`${URL}clientes/id/${recibo.idCliente}`)).data;
     cuenta.saldo = (cliente.saldo - recibo.precio).toFixed(2);
     await axios.post(`${URL}historica`,cuenta);
-}
+};

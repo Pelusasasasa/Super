@@ -136,62 +136,16 @@ button:hover{
     width: 100%;
 }
 
-/* Nuevo Stock */
-
-.nuevoStock input{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+/* Cambio producto */
+.cambio main label{
+    display: inline-block;
+    width: 80%;
 }
 
-.nuevoStock main{
-    margin: 2rem 0;
+.precio fieldset{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.cambio #descripcion{
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.nuevoStock main input{
-    width: 60%;
-    text-align: end;
-}
-
-.nuevoStock .botones{
-    margin: 5rem;
-}
-
-.nuevoStock .botones button{
-    font-size: 2rem;
-}
-
-/* Nuevo Precio */
-
-.nuevoPrecio input{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.nuevoPrecio main{
-    margin: 2rem 0;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.nuevoPrecio main input{
-    width: 60%;
-    text-align: end;
-}
-
-.nuevoPrecio .botones{
-    margin: 5rem;
-}
-
-.nuevoPrecio .botones button{
-    font-size: 2rem;
 }

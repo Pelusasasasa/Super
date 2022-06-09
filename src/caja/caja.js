@@ -82,7 +82,7 @@ listarVentas = (ventas)=>{
         segundos=segundos<10 ? `0${segundos}` : segundos;
         tbody.innerHTML += `
         <tr id="${venta._id}" class="bold">
-            <td>${venta._id}</td><td>${hora}:${minutos}:${segundos}</td><td>${venta.cliente}</td><td></td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
+            <td>${venta._id}</td><td>${hora}:${minutos}:${segundos}</td><td>${venta.cliente}</td><td></td><td></td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
         </tr>
         `;
 
@@ -95,6 +95,7 @@ listarVentas = (ventas)=>{
                 <td>${producto._id ? producto._id : ""}</td>
                 <td>${producto.descripcion}</td>
                 <td>${cantidad.toFixed(2)}</td>
+                <td>${producto.precio.toFixed(2)}</td>
                 <td>${(cantidad*producto.precio).toFixed(2)}</td>
             </tr>
         `

@@ -81,4 +81,44 @@ salir.addEventListener('click',e=>{
 
 document.addEventListener('keydown',e=>{
     cerrarVentana(e)
-})
+});
+
+codigo.addEventListener('focus',e=>{
+    codigo.select();
+});
+
+descripcion.addEventListener('focus',e=>{
+    descripcion.select();
+});
+
+marca.addEventListener('focus',e=>{
+    marca.select();
+});
+
+rubro.addEventListener('focus',e=>{
+    rubro.select();
+});
+
+stock.addEventListener('focus',e=>{
+    stock.select();
+});
+
+costo.addEventListener('focus',e=>{
+    costo.select();
+});
+
+impuesto.addEventListener('focus',e=>{
+    impuesto.select();
+});
+
+costoIva.addEventListener('focus',e=>{
+    costoIva.select();
+});
+
+ganancia.addEventListener('focus',e=>{
+    ganancia.select();
+});
+
+total.addEventListener('focus',e=>{
+    total.select();
+});

@@ -27,6 +27,7 @@ buscar.addEventListener('keypress',async e=>{
                 buscar.focus();
             }else{
                 const ventas = (await axios.get(`${URL}compensada/traerCompensadas/${cliente._id}`)).data;
+                console.log(ventas)
                 listarVentas(ventas);
             }
         }else{

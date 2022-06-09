@@ -1,36 +1,68 @@
 const axios = require('axios');
 require('dotenv').config()
 const URL = process.env.URL;
+const swal = require('sweetalert2');
+
+const {apretarEnter} = require('../helpers')
 
 const codigo = document.querySelector('#codigo');
+const descripcion = document.querySelector('#descripcion');
+const stockViejo = document.querySelector('#stockViejo');
+const stock = document.querySelector('#stock');
 const costo = document.querySelector('#costo');
+const precio = document.querySelector('#precio');
 const nuevoCosto = document.querySelector('#nuevoCosto');
 const nuevoPrecio = document.querySelector('#nuevoPrecio');
 const guardar = document.querySelector('.guardar');
 const salir = document.querySelector('.salir');
-
 
 let producto = {};
 
 codigo.addEventListener('keypress',async e=>{
     if (e.key === "Enter") {
         producto = (await axios.get(`${URL}productos/${codigo.value}`)).data;
-        costo.value = producto.costo;
-        nuevoCosto.focus();
+        if (producto !== "") {
+            costo.value = producto.costo.toFixed(2);
+            descripcion.value = producto.descripcion;
+            stockViejo.value = producto.stock.toFixed(2);
+            precio.value = producto.precio.toFixed(2);
+            descripcion.focus();
+        }else{
+            await swal.fire({
+                title:"No Existe producto con ese codigo"
+            });
+            codigo.value = "";
+        }
     }
 });
+
+descripcion.addEventListener('keypress',e=>{
+    apretarEnter(e,stock);
+});
+
+stock.addEventListener('keypress',e=>{
+    if (e.key === "Enter" && stock.value !== "") {
+        stock.value = parseFloat(stock.value).toFixed(2);
+    }
+    apretarEnter(e,nuevoCosto);
+});
+
 
 nuevoCosto.addEventListener('keypress',e=>{
     if(e.key === "Enter"){
         const impuesto = parseFloat((parseFloat(nuevoCosto.value)*producto.impuesto/100).toFixed(2)) + parseFloat(nuevoCosto.value);
         nuevoPrecio.value = (parseFloat(( impuesto*producto.ganancia/100).toFixed(2)) + impuesto).toFixed(2);
         guardar.focus();
+        nuevoCosto.value = parseFloat(nuevoCosto.value).toFixed(2);
     }
+
 });
 
 guardar.addEventListener('click',async e=>{
     producto.costo = parseFloat(nuevoCosto.value);
     producto.precio = parseFloat(nuevoPrecio.value);
+    producto.stock = parseFloat(stock.value);
+    producto.descripcion = descripcion.value;
     await axios.put(`${URL}productos/${producto._id}`,producto);
     window.close();
 });
