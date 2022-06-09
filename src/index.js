@@ -58,6 +58,21 @@ ipcMain.on('abrir-ventana',(e,args)=>{
 
 ipcMain.on('enviar-ventana-principal',(e,args)=>{
   ventanaPrincipal.webContents.send('recibir-ventana-secundaria',JSON.stringify(args));
+});
+
+ipcMain.on('imprimir',(e,args)=>{
+
+  abrirVentana("ticket/ticket.html",800,500);
+  nuevaVentana.webContents.on('did-finish-load',function() {
+    nuevaVentana.webContents.send('imprimir',JSON.stringify(args));
+    nuevaVentana.webContents.print({silent:true,devineName:"SAM4S GIANT-100"},(success,errorType)=>{
+      if (success) {
+        
+      }else{
+
+      };
+    });
+  });
 })
 
 

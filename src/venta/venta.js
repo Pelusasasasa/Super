@@ -1,7 +1,7 @@
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
-const swal = require('sweetalert2');
+
 const { ipcRenderer } = require('electron');
 const {cerrarVentana,apretarEnter, selecciona_value} = require('../helpers');
 
@@ -182,6 +182,8 @@ const verTipoVenta = ()=>{
 facturar.addEventListener('click',async e=>{
     const venta = {};
     venta.cliente = nombre.value;
+    venta.fecha = new Date();
+    venta.tipo_comp = "Comprobante";
     venta._id = await traerIdVenta();
     venta.idCliente = codigo.value;
     venta.numero = venta._id;
@@ -202,7 +204,10 @@ facturar.addEventListener('click',async e=>{
      venta.tipo_venta === "CC" && ponerEnCuentaCompensada(venta);
      venta.tipo_venta === "CC" && ponerEnCuentaHistorica(venta,parseFloat(saldo.value));
 
+     const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
+
      await axios.post(`${URL}ventas`,venta);
+     ipcRenderer.send('imprimir',[venta,cliente,listaProductos]);
      location.reload();
 })
 
@@ -218,7 +223,8 @@ const listarCliente = async(id)=>{
         codBarra.focus();
         cliente.condicionFacturacion === 1 ? cuentaCorrientediv.classList.remove('none') : cuentaCorrientediv.classList.add('none')
     }else{
-        await swal.fire('Cliente No Existe');
+    
+
         codigo.value = "";
         codigo.focus();
     }
