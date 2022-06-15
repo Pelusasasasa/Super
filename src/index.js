@@ -67,11 +67,11 @@ ipcMain.on('imprimir',(e,args)=>{
     nuevaVentana.webContents.send('imprimir',JSON.stringify(args));
     nuevaVentana.webContents.print({silent:true,deviceName:"SAM4S GIANT-100"},(success,errorType)=>{
       if (success) {
-        // ventanaPrincipal.focus();
-        // nuevaVentana.close();
+        ventanaPrincipal.focus();
+        nuevaVentana.close();
       }else{
-        // ventanaPrincipal.focus();
-        // nuevaVentana && nuevaVentana.close();
+        ventanaPrincipal.focus();
+        nuevaVentana && nuevaVentana.close();
       };
     });
   });
@@ -123,10 +123,21 @@ const hacerMenu = () => {
       }
     },
     {
-      label: "Cambio de Precio",
+      label: "Cambio de producto",
       click(){
-        abrirVentana("productos/cambioPrecio.html",500,400)
+        abrirVentana("productos/cambio.html",500,500)
       }
+    },
+    {
+      label: "Datos",
+      submenu:[
+        {
+          label:"Numeros",
+          click(){
+            abrirVentana("numeros/numeros.html",700,400)
+          }
+        }
+      ]
     },
     {
       label:"",

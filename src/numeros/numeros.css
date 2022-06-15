@@ -1,0 +1,60 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+      Arial, sans-serif;
+  
+ }
+  
+ html {
+    box-sizing: border-box;
+    font-size: 62.5%;
+ }
+ *,
+ *:before,
+ *:after {
+    box-sizing: inherit;
+ }
+ 
+ body {
+    font-size: 1.6rem;
+    padding: 0 2rem;
+    background-color: burlywood;
+ }
+ 
+.inputs{
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs main{
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs main label{
+    display: inline-block;
+}
+
+.inputs main input{
+    display: inline-block;
+    font-size: 2rem;
+}
+
+.botones{ 
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+}
+
+button{
+    font-size: 1.5rem;
+    border: none;
+    padding: 1rem;
+    border-radius: 7.5rem;
+}
+
+button:hover{
+    cursor: pointer;
+    transform: scale(1.2);
+}
+

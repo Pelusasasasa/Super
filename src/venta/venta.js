@@ -1,6 +1,7 @@
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
+const sweal = require('sweetalert2');
 
 const { ipcRenderer } = require('electron');
 const {cerrarVentana,apretarEnter, selecciona_value} = require('../helpers');
@@ -30,6 +31,7 @@ const facturar = document.querySelector('.facturar');
 const borrar = document.querySelector(".borrar");
 
 let movimientos = [];
+let descuentoStock = [];
 let totalGlobal = 0;
 
 //Por defecto ponemos el A Consumidor Final
@@ -184,21 +186,27 @@ facturar.addEventListener('click',async e=>{
     venta.cliente = nombre.value;
     venta.fecha = new Date();
     venta.tipo_comp = "Comprobante";
-    venta._id = await traerIdVenta();
     venta.idCliente = codigo.value;
-    venta.numero = venta._id;
     venta.precio = parseFloat(total.value);
     venta.descuento = parseFloat(descuento.value);
-    venta.tipo_venta = verTipoVenta();
+    venta.tipo_venta = await verTipoVenta();
+    venta.numero = venta.tipo_venta === "CC" ? (await axios.get(`${URL}numero`)).data["Cuenta Corriente"] + 1 : (await axios.get(`${URL}numero`)).data["Contado"] + 1;
+    if (venta.tipo_venta === "CC") {
+        await axios.put(`${URL}numero/Cuenta Corriente`,{"Cuenta Corriente":venta.numero});
+    }else{
+        await axios.put(`${URL}numero/Contado`,{Contado:venta.numero});
+    }
     venta.listaProductos = listaProductos;
     
      for (let producto of listaProductos){
-         await cargarMovimiento(producto,venta._id,venta.cliente);
+         await cargarMovimiento(producto,venta.numero,venta.cliente);
+         await descontarStock(producto)
          producto.producto.precio = producto.producto.precio - parseFloat((parseFloat(descuentoPor.value) * producto.producto.precio / 100).toFixed(2));
      }
+     await axios.put(`${URL}productos`,descuentoStock)
      await axios.post(`${URL}movimiento`,movimientos);
     //sumamos al cliente el saldo y agregamos la venta a la lista de venta
-     venta.tipo_venta === "CC" && sumarSaldo(venta.idCliente,venta.precio,venta._id);
+     venta.tipo_venta === "CC" && sumarSaldo(venta.idCliente,venta.precio,venta.numero);
     
     //Ponemos en la cuenta conpensada si es CC
      venta.tipo_venta === "CC" && ponerEnCuentaCompensada(venta);
@@ -262,6 +270,12 @@ const cargarMovimiento = async({cantidad,producto},numero,cliente)=>{
     movimiento.rubro = producto.rubro;
     movimiento.nro_venta = numero;
     movimientos.push(movimiento);
+};
+
+//Descontamos el stock
+const descontarStock = async({cantidad,producto})=>{
+    producto.stock -= cantidad;
+    descuentoStock.push(producto)
 }
 
 
@@ -376,8 +390,16 @@ cobrado.addEventListener('focus',e=>{
 
 document.addEventListener('keydown',e=>{
     if (e.key === "Escape") {
-        if (confirm("Cancelar Venta?")) {
-            location.href = "../menu.html" ;
-        };
+        
+        sweal.fire({
+            title: "Cancelar Venta?",
+            "showCancelButton": true,
+            "confirmButtonText" : "Aceptar",
+            "cancelButtonText" : "Cancelar"
+        }).then((result)=>{
+            if (result.isConfirmed) {
+                location.href = "../menu.html" ;
+            }
+        });
     };
 })

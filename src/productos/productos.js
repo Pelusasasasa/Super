@@ -97,11 +97,17 @@ ipcRenderer.on('informacion',(e,args)=>{
 
 eliminar.addEventListener('click',async e=>{
     if(productoSeleccionado){
-        if (confirm("Seguro Borrar Producto")) {
-            const mensaje = (await axios.delete(`${URL}productos/${productoSeleccionado.id}`)).data;
-            sweal.file({title:mensaje});
-            location.reload();
-        }
+        sweal.fire({
+            title:"Seguro Borrar Producto?",
+            "showCancelButton":true,
+            "confirmButtonText":"Aceptar"
+        }).then(async (result)=>{
+            if (result.isConfirmed) {
+                const mensaje = (await axios.delete(`${URL}productos/${productoSeleccionado.id}`)).data;
+                    sweal.fire({title:mensaje});
+                     location.reload(); 
+            }
+        })
     }else{
         sweal.file({title:"No se selecciono ningun producto"});
     }

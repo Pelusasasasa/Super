@@ -154,11 +154,10 @@ inputSeleccionado.addEventListener('keypress',e=>{
 imprimir.addEventListener('click',async e=>{
     const recibo = {};
     recibo.fecha = new Date();
-    recibo._id = (await axios.get(`${URL}recibo`)).data;
     recibo.cliente = nombre.value;
     recibo.idCliente = codigo.value;
     const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
-    recibo.numero = recibo._id;
+    recibo.numero = (await axios.get(`${URL}numero`)).data["Recibo"] + 1;
     recibo.tipo_comp = "Recibo";
     recibo.descuento = 0;
     recibo.precio = parseFloat(total.value);
@@ -176,8 +175,8 @@ imprimir.addEventListener('click',async e=>{
             venta.pagado = parseFloat(tr.children[3].innerHTML) + parseFloat(tr.children[4].children[0].value)
             lista.push(venta);   
         }
-    }
-    console.log(lista)
+    };
+    await axios.put(`${URL}numero/Recibo`,{Recibo:recibo.numero})
     ipcRenderer.send('imprimir',[recibo,cliente,lista])
     location.href = "../menu.html";
 });

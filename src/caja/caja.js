@@ -81,15 +81,15 @@ listarVentas = (ventas)=>{
         let segundos = fecha.getSeconds(); 
         segundos=segundos<10 ? `0${segundos}` : segundos;
         tbody.innerHTML += `
-        <tr id="${venta._id}" class="bold">
-            <td>${venta._id}</td><td>${hora}:${minutos}:${segundos}</td><td>${venta.cliente}</td><td></td><td></td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
+        <tr id="${venta.numero}" class="bold">
+            <td>${venta.numero}</td><td>${hora}:${minutos}:${segundos}</td><td>${venta.cliente}</td><td></td><td></td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
         </tr>
         `;
 
         venta.listaProductos.forEach(({cantidad,producto})=>{
             tbody.innerHTML += `
-            <tr class="none venta${venta._id}">
-                <td>${venta._id}</td>
+            <tr class="none venta${venta.numero}">
+                <td>${venta.numero}</td>
                 <td>${hora}:${minutos}:${segundos}</td>
                 <td>${venta.cliente ? venta.cliente : "CONSUMIDOR FINAL"}</td>
                 <td>${producto._id ? producto._id : ""}</td>
