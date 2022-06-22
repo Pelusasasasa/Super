@@ -1,7 +1,7 @@
 const axios = require('axios');
 require('dotenv').config()
 const URL = process.env.URL;
-const swal = require('sweetalert2');
+const sweet = require('sweetalert2');
 
 const {apretarEnter} = require('../helpers')
 
@@ -28,7 +28,7 @@ codigo.addEventListener('keypress',async e=>{
             precio.value = producto.precio.toFixed(2);
             descripcion.focus();
         }else{
-            await swal.fire({
+            await sweet.fire({
                 title:"No Existe producto con ese codigo"
             });
             codigo.value = "";
@@ -59,12 +59,17 @@ nuevoCosto.addEventListener('keypress',e=>{
 });
 
 guardar.addEventListener('click',async e=>{
-    producto.costo = parseFloat(nuevoCosto.value);
-    producto.precio = parseFloat(nuevoPrecio.value);
-    producto.stock = parseFloat(stock.value);
-    producto.descripcion = descripcion.value;
-    await axios.put(`${URL}productos/${producto._id}`,producto);
-    window.close();
+    producto.costo = nuevoCosto.value !== "" ? parseFloat(nuevoCosto.value) : producto.costo;
+    producto.precio = nuevoPrecio.value !== "" ? parseFloat(nuevoPrecio.value) : producto.precio;
+    producto.stock = stock.value !== "" ? parseFloat(stock.value) : producto.stock;
+    producto.descripcion = descripcion.value !== "" ? descripcion.value : producto.descripcion;
+    const {mensaje,estado} =(await axios.put(`${URL}productos/${producto._id}`,producto)).data;
+    await sweet.fire({
+        title:mensaje
+    })
+    if (estado) {
+        window.close();
+    }
 });
 
 salir.addEventListener('click',e=>{

@@ -19,6 +19,7 @@ const buscador = document.querySelector('#buscarProducto');
 const eliminar = document.querySelector('.eliminar');
 
 const listar = (productos)=>{
+    console.log(productos)
     productos.forEach(({_id,descripcion,marca,stock,precio})=>{
         tbody.innerHTML += `
             <tr id=${_id}>

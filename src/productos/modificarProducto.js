@@ -1,6 +1,6 @@
 const { ipcRenderer } = require('electron');
 const {cerrarVentana,apretarEnter,selecciona_value} = require('../helpers');
-
+const sweet = require('sweetalert2');
 
 const axios = require('axios');
 require("dotenv").config();
@@ -68,9 +68,14 @@ modificar.addEventListener('click',async e=>{
     producto.impuesto = parseFloat(impuesto.value).toFixed(2);
     producto.ganancia = parseFloat(ganancia.value).toFixed(2);
     producto.precio = parseFloat(total.value).toFixed(2);
-    (await axios.put(`${URL}productos/${producto._id}`,producto));
+    const {mensaje,estado} =  (await axios.put(`${URL}productos/${producto._id}`,producto)).data;
     await ipcRenderer.send('informacion-a-ventana',producto);
-    window.close();
+    await sweet.fire({
+        title:mensaje
+    })
+    if (estado) {
+        window.close();
+    }
 })
 
 codigo.addEventListener('keypress',e=>{
