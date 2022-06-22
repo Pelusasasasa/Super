@@ -29,17 +29,24 @@ agregar.addEventListener('click',async e=>{
     cliente.telefono = telefono.value;
     cliente.direccion = direccion.value;
     cliente.condicionFacturacion = condicionFacturacion.value;
-    const mensaje = (await axios.post(`${URL}clientes`,cliente)).data;
+    const {mensaje,estado} = (await axios.post(`${URL}clientes`,cliente)).data;
     await sweal.fire({
         title:mensaje
     });
-    window.close();
+    if (estado) {
+        window.close();
+    }
 })
 
 
 nombre.addEventListener('keypress',e=>{
-    apretarEnter(e,localidad);
+    apretarEnter(e,condicionFacturacion);
 });
+
+condicionFacturacion.addEventListener('keypress',e=>{
+    e.preventDefault();
+    apretarEnter(e,localidad)
+})
 
 localidad.addEventListener('keypress',e=>{
     apretarEnter(e,telefono);

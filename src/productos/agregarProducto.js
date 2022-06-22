@@ -11,6 +11,8 @@ const ganancia = document.querySelector('#ganancia');
 const total = document.querySelector('#total');
 const guardar = document.querySelector('.guardar');
 
+const sweet  = require('sweetalert2');
+
 const axios = require('axios');
 require('dotenv').config()
 const URL = process.env.URL;
@@ -36,8 +38,14 @@ guardar.addEventListener('click',async ()=>{
     producto.ganancia = ganancia.value;
     producto.precio = total.value;
     console.log(producto);
-    await axios.post(`${URL}productos`,producto)
-    window.close();
+    const {estado,mensaje} = (await axios.post(`${URL}productos`,producto)).data
+    sweet.fire({
+        title:mensaje
+    })
+    if (estado) {
+        window.close();
+    }
+    
 })
 
 codigo.addEventListener('keypress',e=>{
