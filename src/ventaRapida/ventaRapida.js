@@ -12,12 +12,14 @@ const salir = document.querySelector('.salir');
 
 facturar.addEventListener('click',async e=>{
     const venta = {};
-    venta.numero = (await axios.get(`${URL}numero`)).data["Contado"];
+    venta.numero = (await axios.get(`${URL}numero`)).data["Contado"] + 1;
+    await axios.put(`${URL}numero/Contado`,{Contado:venta.numero});
     venta.precio = precio.value;
     venta.fecha = new Date();
     venta.idCliente = 1;
-    venta.cliente = "CONSUMIDOR FINAL";
+    venta.cliente = "A CONSUMIDOR FINAL";
     venta.tipo_venta = "CD";
+    venta.descripcion = descripcion.value;
     await axios.put(`${URL}numero/Contado`,{Contado:venta.numero});
     await axios.post(`${URL}ventas`,venta);
     window.close();

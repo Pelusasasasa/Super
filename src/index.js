@@ -117,12 +117,6 @@ const hacerMenu = () => {
         }
     },
     {
-      label: "Cambio de Stock",
-      click(){
-        abrirVentana("productos/cambioStock.html",500,400)
-      }
-    },
-    {
       label: "Cambio de producto",
       click(){
         abrirVentana("productos/cambio.html",500,500)
@@ -135,6 +129,12 @@ const hacerMenu = () => {
           label:"Numeros",
           click(){
             abrirVentana("numeros/numeros.html",700,400)
+          }
+        },
+        {
+          label:"Listado Saldos",
+          click(){
+            abrirVentana("clientes/listadoSaldo.html",1000,1200)
           }
         }
       ]

@@ -1,4 +1,4 @@
-const sweal = require('sweetalert2');
+const sweet = require('sweetalert2');
 const { ipcRenderer } = require('electron');
 const {cerrarVentana,apretarEnter,selecciona_value} = require('../helpers');
 
@@ -72,7 +72,7 @@ modificar.addEventListener('click',async e=>{
     cliente.direccion = direccion.value;
     cliente.condicionFacturacion = condicionFacturacion.value;
     const mensaje = (await axios.put(`${URL}clientes/id/${cliente._id}`,cliente)).data;
-    sweal(mensaje);
+    await sweet.fire({title:mensaje});
     ipcRenderer.send('enviar-ventana-principal',cliente);
     window.close();
 })

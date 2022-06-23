@@ -190,8 +190,29 @@ button:hover{
 
 /*Modificar Cliente*/
 
+/*listado Saldo*/
+.lista{
+    background-color: white;
+    height: 80vh;
+    overflow-y: scroll;
+}
+
+.lista tr td{
+    border: .1rem solid black
+}
+
+.lista .negrita{
+    font-weight: bold;
+}
+
+.lista .izquierda{
+    text-align: end;
+}
+/*listado Saldo*/
+
 /* Global */
 .primero select{
     font-size: 2rem;
     padding: 1rem;
 }
+
