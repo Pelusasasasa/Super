@@ -6,12 +6,14 @@ const URL = process.env.URL;
 
 const fecha = document.querySelector('.fecha');
 const tbody = document.querySelector('.tbody');
-
+const saldo = document.querySelector('#saldo');
+let total = 0;
 const listar = async()=>{
     const clientes = (await axios.get(`${URL}clientes/clientesConSaldo`)).data;
 
     for await(let cliente of clientes){
         const {nombre,_id,direccion,telefono,saldo} = cliente;
+        total+=saldo;
         tbody.innerHTML += `
             <tr>
                 <td>${_id}</td>
@@ -22,6 +24,7 @@ const listar = async()=>{
             </tr>
         `
     }
+    saldo.value = total.toFixed(2);
 }
 
 listar();

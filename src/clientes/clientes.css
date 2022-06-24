@@ -193,12 +193,27 @@ button:hover{
 /*listado Saldo*/
 .lista{
     background-color: white;
-    height: 80vh;
+    height: 70vh;
     overflow-y: scroll;
 }
 
 .lista tr td{
     border: .1rem solid black
+}
+
+.info{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1rem;
+}
+
+.info input{
+    width: 15%;
+    text-align: end;
+    font-size: 2rem;
+    font-weight: 900;
+    color: black;
+    background-color: white;
 }
 
 .lista .negrita{
