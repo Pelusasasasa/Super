@@ -57,14 +57,13 @@ const listar = async(venta,clienteTraido,lista)=>{
     }
     for await(const elem of lista){
         if (venta.tipo_comp === "Comprobante") {
-            const {producto,cantidad} = elem;
             listado.innerHTML += `
                 <main>
-                    <p>${producto.descripcion}</p>
-                    <p>${(producto.precio * cantidad).toFixed(2)}</p>
+                    <p>${elem.producto}</p>
+                    <p>${(elem.precio * elem.cantidad).toFixed(2)}</p>
                 </main>
                 <main class = "linea">
-                    <p>${cantidad.toFixed(2)}/${producto.precio.toFixed(2)}</p>
+                    <p>${elem.cantidad.toFixed(2)}/${elem.precio.toFixed(2)}</p>
                     <p></p>
                 </main>
             `   

@@ -3,7 +3,7 @@ require("dotenv").config();
 const URL = process.env.URL;
 const { ipcRenderer } = require('electron');
 const {apretarEnter,selecciona_value} = require('../helpers');
-const swal = require('sweetalert2');
+const sweet = require('sweetalert2');
 
 const codigo = document.querySelector('#codigo');
 const nombre = document.querySelector('#nombre');
@@ -82,7 +82,7 @@ const ponerInputs = async(id)=>{
             ponerVenta(compensada);
         });
     }else{
-        await swal.fire("Cliente no encontrado");
+        await sweet.fire("Cliente no encontrado");
         codigo.value = "";
         nombre.value = "";
         saldo.value = "";

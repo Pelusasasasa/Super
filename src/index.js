@@ -1,5 +1,6 @@
 const { app, BrowserWindow,Menu } = require('electron');
 const { ipcMain } = require('electron/main');
+const { ipcRenderer } = require('electron/renderer');
 const path = require('path');
 var isDev = process.env.APP_DEV ? (process.env.APP_DEV.trim() == "true") : false;
 
@@ -68,10 +69,10 @@ ipcMain.on('imprimir',(e,args)=>{
     nuevaVentana.webContents.print({silent:true,deviceName:"SAM4S GIANT-100"},(success,errorType)=>{
       if (success) {
         ventanaPrincipal.focus();
-        nuevaVentana.close();
+        // nuevaVentana.close();
       }else{
         ventanaPrincipal.focus();
-        nuevaVentana && nuevaVentana.close();
+        // nuevaVentana && nuevaVentana.close();
       };
     });
   });
@@ -135,6 +136,12 @@ const hacerMenu = () => {
           label:"Listado Saldos",
           click(){
             abrirVentana("clientes/listadoSaldo.html",1000,1200)
+          }
+        },
+        {
+          label:"Imprimir Venta",
+          click(){
+            ventanaPrincipal.webContents.send('poner-numero');
           }
         }
       ]

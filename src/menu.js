@@ -1,8 +1,10 @@
 const { ipcRenderer } = require("electron");
-const swal = require('sweetalert2');
+const sweet = require('sweetalert2');
+const axios = require('axios');
+require("dotenv").config();
+const URL = process.env.URL;
 
 document.addEventListener('keyup',e=>{
-    console.log(e.keyCode)
     if (e.keyCode === 112) {
         location.href = "./venta/index.html"
     }else if(e.keyCode === 113){
@@ -57,3 +59,22 @@ const recibo = document.querySelector('.recibo');
 recibo.addEventListener('click',e=>{
     location.href = "./recibo/recibo.html";
 });
+
+
+//ponemos un numero para la venta
+ipcRenderer.on('poner-numero',async (e,args)=>{
+    await sweet.fire({
+        title:"Numero de Venta",
+        input:"text",
+        showCancelButton:true,
+        confirmButtonText:"Aceptar"
+    }).then(async ({isConfirmed,value})=>{
+        if (isConfirmed && value !== "") {
+            console.log(value)
+            const venta = (await axios.get(`${URL}ventas/id/${value}/CD`)).data;
+            const movimientos = (await axios.get(`${URL}movimiento/${venta.numero}`)).data;
+            const cliente = (await axios.get(`${URL}clientes/id/${venta.idCliente}`)).data;
+            ipcRenderer.send('imprimir',[venta,cliente,movimientos])
+        }
+    })
+})

@@ -215,7 +215,7 @@ facturar.addEventListener('click',async e=>{
      const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
 
      await axios.post(`${URL}ventas`,venta);
-     ipcRenderer.send('imprimir',[venta,cliente,listaProductos]);
+     ipcRenderer.send('imprimir',[venta,cliente,movimientos]);
      location.reload();
 })
 
