@@ -1,7 +1,7 @@
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
-const sweal = require('sweetalert2');
+const sweet = require('sweetalert2');
 
 const { ipcRenderer } = require('electron');
 const {cerrarVentana,apretarEnter, selecciona_value} = require('../helpers');
@@ -103,7 +103,15 @@ codBarra.addEventListener('keyup',e=>{
 });
 
 precioU.addEventListener('keypress',e=>{
-    rubro.focus();
+    if ((e.key === "Enter")) {
+        if (precioU.value !== "") {
+            rubro.focus();   
+        }else{
+            sweet.fire({
+                title:"Poner un precio al Producto",
+            });
+        }
+    }
 });
 
 rubro.addEventListener('keypress',e=>{
@@ -391,7 +399,7 @@ cobrado.addEventListener('focus',e=>{
 document.addEventListener('keydown',e=>{
     if (e.key === "Escape") {
         
-        sweal.fire({
+        sweet.fire({
             title: "Cancelar Venta?",
             "showCancelButton": true,
             "confirmButtonText" : "Aceptar",

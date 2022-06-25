@@ -1,4 +1,4 @@
-const sweal = require('sweetalert2');
+const sweet = require('sweetalert2');
 const {cerrarVentana,apretarEnter} = require('../helpers');
 const axios = require('axios');
 const { ipcRenderer } = require('electron/renderer');
@@ -23,7 +23,7 @@ buscar.addEventListener('keypress',async e=>{
             saldo.value = (cliente.saldo).toFixed(2);
             clienteInput.value = cliente.nombre;
             if (cliente === "") {
-                sweal.fire({title:"Cliente no encontrado"});
+                sweet.fire({title:"Cliente no encontrado"});
                 buscar.value = "";
                 buscar.focus();
             }else{
@@ -135,7 +135,7 @@ actualizar.addEventListener('click',async e=>{
             movimiento.precio = precio !== "" ? precio : movimiento.precio;
             total += (precio*movimiento.cantidad);
         };
-        sweal.fire({
+        sweet.fire({
             title:"Grabar Importe?",
             "showCancelButton":true,
             "confirmButtonText":"Aceptar"

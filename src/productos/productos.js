@@ -1,5 +1,5 @@
 const { ipcRenderer } = require("electron");
-const sweal = require('sweetalert2');
+const sweet = require('sweetalert2');
 
 const axios = require('axios');
 require("dotenv").config();
@@ -70,7 +70,7 @@ modificar.addEventListener('click',e=>{
         }
         ipcRenderer.send('abrir-ventana',opciones);
     }else{
-        sweal.file({title:"Producto no seleccionado"});
+        sweet.file({title:"Producto no seleccionado"});
     }
 })
 
@@ -98,19 +98,19 @@ ipcRenderer.on('informacion',(e,args)=>{
 
 eliminar.addEventListener('click',async e=>{
     if(productoSeleccionado){
-        sweal.fire({
+        sweet.fire({
             title:"Seguro Borrar Producto?",
             "showCancelButton":true,
             "confirmButtonText":"Aceptar"
         }).then(async (result)=>{
             if (result.isConfirmed) {
                 const mensaje = (await axios.delete(`${URL}productos/${productoSeleccionado.id}`)).data;
-                    sweal.fire({title:mensaje});
+                    sweet.fire({title:mensaje});
                      location.reload(); 
             }
         })
     }else{
-        sweal.file({title:"No se selecciono ningun producto"});
+        sweet.file({title:"No se selecciono ningun producto"});
     }
 })
 
@@ -126,7 +126,7 @@ body.addEventListener('keypress',e=>{
             });
             window.close();
         }else{
-            sweal.file({title:"Producto no seleccionado"});
+            sweet.file({title:"Producto no seleccionado"});
         }
     }
 })

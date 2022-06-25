@@ -1,4 +1,4 @@
-const sweal = require('sweetalert2');
+const sweet = require('sweetalert2');
 const axios = require('axios');
 const { ipcRenderer } = require('electron');
 require('dotenv').config()
@@ -40,18 +40,18 @@ agregar.addEventListener('click',e=>{
     ipcRenderer.send('abrir-ventana',{path:"./clientes/agregarCliente.html"});
 })
 modificar.addEventListener('click',e=>{
-    seleccionado ? ipcRenderer.send('abrir-ventana',{path:"clientes/modificarCliente.html",informacion:seleccionado.id}) : sweal.fire({title:"Cliente no seleccionado"});
+    seleccionado ? ipcRenderer.send('abrir-ventana',{path:"clientes/modificarCliente.html",informacion:seleccionado.id}) : sweet.fire({title:"Cliente no seleccionado"});
 
 })
 eliminar.addEventListener('click',async e=>{
     if (seleccionado) {
         const mensaje = (await axios.delete(`${URL}clientes/id/${seleccionado.id}`)).data;
-        await sweal.fire({
+        await sweet.fire({
             title:mensaje
         });
         location.reload();
     }else{
-        await sweal.fire({
+        await sweet.fire({
             title:"Cliente no seleccionado"
         });
     }
