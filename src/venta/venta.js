@@ -4,7 +4,7 @@ const URL = process.env.URL;
 const sweet = require('sweetalert2');
 
 const { ipcRenderer } = require('electron');
-const {cerrarVentana,apretarEnter, selecciona_value} = require('../helpers');
+const {cerrarVentana,apretarEnter, selecciona_value, redondear} = require('../helpers');
 
 //Parte Cliente
 const codigo = document.querySelector('#codigo');
@@ -129,11 +129,11 @@ rubro.addEventListener('keypress',e=>{
             <td></td>
             <td>${codBarra.value.toUpperCase()}</td>
             <td>${precioU.value}</td>
-            <td>${(parseFloat(precioU.value) * parseFloat(cantidad.value)).toFixed(2)}</td>
+            <td>${redondear((parseFloat(precioU.value) * parseFloat(cantidad.value)),2)}</td>
         </tr>
     `;
 
-        total.value = (parseFloat(total.value) + parseFloat(precioU.value) * parseFloat(cantidad.value)).toFixed(2);
+        total.value = redondear((parseFloat(total.value) + parseFloat(precioU.value) * parseFloat(cantidad.value)),2);
         totalGlobal = parseFloat(total.value);
         cantidad.value = "1.00";
         codBarra.value = "";
@@ -158,24 +158,18 @@ ipcRenderer.on('recibir',(e,args)=>{
 //sacamos el descuento cuando apretamos enter en el input
 descuentoPor.addEventListener('keydown',e=>{
     if(e.key === "Enter" || e.key === "Tab"){
-        descuento.value = (totalGlobal * (parseFloat(e.target.value)) / 100).toFixed(2);
-        total.value = (totalGlobal - parseFloat(descuento.value)).toFixed(2);
+        descuento.value = redondear((totalGlobal * (parseFloat(e.target.value)) / 100),2);
+        total.value = redondear((totalGlobal - parseFloat(descuento.value)),2);
     }
 })
 
 cobrado.addEventListener('keydown',e=>{
     if (e.key === "Enter" || e.key === "Tab") {
-        total.value = parseFloat(cobrado.value).toFixed(2);
-        descuento.value = (totalGlobal - (parseFloat(cobrado.value))).toFixed(2);
-        descuentoPor.value = (parseFloat(descuento.value)*100/totalGlobal).toFixed(2)
+        total.value = redondear(cobrado.value,2);
+        descuento.value = redondear(totalGlobal - (parseFloat(cobrado.value)),2);
+        descuentoPor.value = redondear(parseFloat(descuento.value)*100/totalGlobal,2);
     }
 });
-
-//traemos el id de la nueva venta
-const traerIdVenta = async()=>{
-    const id = (await axios.get(`${URL}ventas`)).data;
-    return id;
-};
 
 //Vemos que input tipo radio esta seleccionado
 const verTipoVenta = ()=>{
@@ -209,8 +203,9 @@ facturar.addEventListener('click',async e=>{
      for (let producto of listaProductos){
          await cargarMovimiento(producto,venta.numero,venta.cliente);
          await descontarStock(producto)
-         producto.producto.precio = producto.producto.precio - parseFloat((parseFloat(descuentoPor.value) * producto.producto.precio / 100).toFixed(2));
+         //producto.producto.precio = producto.producto.precio - redondear((parseFloat(descuentoPor.value) * producto.producto.precio / 100,2));
      }
+     console.log(descuentoStock)
      await axios.put(`${URL}productos`,descuentoStock)
      await axios.post(`${URL}movimiento`,movimientos);
     //sumamos al cliente el saldo y agregamos la venta a la lista de venta
@@ -223,7 +218,7 @@ facturar.addEventListener('click',async e=>{
      const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
 
      await axios.post(`${URL}ventas`,venta);
-     ipcRenderer.send('imprimir',[venta,cliente,movimientos]);
+     //ipcRenderer.send('imprimir',[venta,cliente,movimientos]);
      location.reload();
 })
 
@@ -274,7 +269,7 @@ const cargarMovimiento = async({cantidad,producto},numero,cliente)=>{
     movimiento.producto = producto.descripcion;
     movimiento.cliente = cliente
     movimiento.cantidad = cantidad;
-    movimiento.precio = parseFloat((producto.precio - (producto.precio * parseFloat(descuentoPor.value) / 100)).toFixed(2));
+    movimiento.precio = parseFloat(redondear(producto.precio - (producto.precio * parseFloat(descuentoPor.value) / 100),2));
     movimiento.rubro = producto.rubro;
     movimiento.nro_venta = numero;
     movimientos.push(movimiento);
@@ -300,24 +295,24 @@ const listarProducto =async(id)=>{
         if(producto !== "" && !productoYaUsado){
         listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         codBarra.value = producto._id;
-        precioU.value = (producto.precio.toFixed(2));
+        precioU.value = redondear(producto.precio,2);
         tbody.innerHTML += `
         <tr id=${producto._id}>
             <td>${cantidad.value}</td>
             <td>${codBarra.value}</td>
             <td>${producto.descripcion.toUpperCase()}</td>
             <td>${precioU.value}</td>
-            <td>${(parseFloat(precioU.value) * parseFloat(cantidad.value)).toFixed(2)}</td>
+            <td>${redondear(parseFloat(precioU.value) * parseFloat(cantidad.value),2)}</td>
         </tr>
     `;
-        total.value = (parseFloat(total.value) + (parseFloat(cantidad.value) * parseFloat(precioU.value))).toFixed(2);
+        total.value = redondear(parseFloat(total.value) + (parseFloat(cantidad.value) * parseFloat(precioU.value)),2);
         totalGlobal = parseFloat(total.value);
         }else if(producto !== "" && productoYaUsado){
             productoYaUsado.cantidad += parseFloat(cantidad.value)
             const tr = document.getElementById(producto._id);
-            tr.children[0].innerHTML = (parseFloat(tr.children[0].innerHTML) + parseFloat(cantidad.value)).toFixed(2);
-            tr.children[4].innerHTML = (parseFloat(tr.children[0].innerHTML) * producto.precio).toFixed(2);
-            total.value = (parseFloat(total.value) + (parseFloat(cantidad.value) * producto.precio)).toFixed(2);
+            tr.children[0].innerHTML = redondear(parseFloat(tr.children[0].innerHTML) + parseFloat(cantidad.value),2);
+            tr.children[4].innerHTML = redondear(parseFloat(tr.children[0].innerHTML) * producto.precio,2);
+            total.value = redondear(parseFloat(total.value) + (parseFloat(cantidad.value) * producto.precio),2);
             totalGlobal = parseFloat(total.value);
         }
         cantidad.value = "1.00";
@@ -351,9 +346,9 @@ const sumarSaldo = async(id,nuevoSaldo,venta)=>{
 }
 
 borrar.addEventListener('click',e=>{
-    total.value = (totalGlobal -  parseFloat(seleccionado.children[4].innerHTML)).toFixed(2);
-    descuento.value = (parseFloat(descuentoPor.value) * parseFloat(total.value) / 100).toFixed(2);
-    total.value = (parseFloat(total.value) - parseFloat(descuento.value)).toFixed(2);
+    total.value = redondear(totalGlobal -  parseFloat(seleccionado.children[4].innerHTML));
+    descuento.value = redondear(parseFloat(descuentoPor.value) * parseFloat(total.value) / 100);
+    total.value = redondear(parseFloat(total.value) - parseFloat(descuento.value));
     totalGlobal = parseFloat(total.value);
     listaProductos =  listaProductos.filter(({cantidad,producto})=>producto._id !== seleccionado.id);
     tbody.removeChild(seleccionado);

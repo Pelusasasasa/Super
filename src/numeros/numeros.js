@@ -16,11 +16,14 @@ let id;
 
 const listar = async()=>{
     const numeros =(await axios.get(`${URL}numero`)).data;
-    (numeros.Contado !== 0 || numeros["Cuenta Corriente"] !== 0 || numeros.Recibo !== 0) && cargar.classList.add('none')
-    id = numeros._id;
-    contado.value = numeros.Contado.toString().padStart(8,'0')
-    recibo.value = numeros.Recibo.toString().padStart(8,'0')
-    cuentaCorriente.value = numeros["Cuenta Corriente"].toString().padStart(8,'0')
+    console.log(numeros);
+    (numeros.Contado === 0 || numeros["Cuenta Corriente"] === 0 || numeros.Recibo === 0 || numeros !== "") && cargar.classList.add('none');
+    if (numeros !== "") {
+        id = numeros._id;
+        contado.value = numeros.Contado.toString().padStart(8,'0')
+        recibo.value = numeros.Recibo.toString().padStart(8,'0')
+        cuentaCorriente.value = numeros["Cuenta Corriente"].toString().padStart(8,'0')
+    }
 }
 
 cargar.addEventListener('click',async e=>{
@@ -29,7 +32,8 @@ cargar.addEventListener('click',async e=>{
         "Contado": 0,
         "Recibo": 0
     }
-    await axios.post(`${URL}numero`)
+    await axios.post(`${URL}numero`,numero);
+    location.reload();
 });
 
 modificar.addEventListener('click',e=>{

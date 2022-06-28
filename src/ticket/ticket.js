@@ -56,6 +56,7 @@ const listar = async(venta,clienteTraido,lista)=>{
         descripcion.classList.add('none')
     }
     for await(const elem of lista){
+        console.log(elem)
         if (venta.tipo_comp === "Comprobante") {
             listado.innerHTML += `
                 <main>

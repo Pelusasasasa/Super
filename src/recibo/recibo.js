@@ -177,7 +177,7 @@ imprimir.addEventListener('click',async e=>{
         }
     };
     await axios.put(`${URL}numero/Recibo`,{Recibo:recibo.numero})
-    ipcRenderer.send('imprimir',[recibo,cliente,lista])
+    //ipcRenderer.send('imprimir',[recibo,cliente,lista])
     location.href = "../menu.html";
 });
 

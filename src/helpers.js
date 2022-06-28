@@ -30,4 +30,10 @@ funciones.selecciona_value = (idInput)=>{
     range.select();
     }
 }
+
+funciones.redondear = (numero,decimales)=>{
+    const signo = numero >= 0 ? 1 : -1;
+    return(parseFloat(Math.round((numero * Math.pow(10,decimales)) + (signo * 0.0001)) / Math.pow(10,decimales)).toFixed(decimales));
+  }
+
 module.exports = funciones;
