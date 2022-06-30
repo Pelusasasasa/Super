@@ -147,7 +147,7 @@ const hacerMenu = () => {
       ]
     },
     {
-      label:"",
+      label:"tools",
       accelerator: process.platform == "darwin" ? "Comand+D" : "Ctrl+D",
       click(item,focusedWindow){
         focusedWindow.toggleDevTools(); 
