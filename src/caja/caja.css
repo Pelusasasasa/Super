@@ -3,7 +3,10 @@ body {
       Arial, sans-serif;
   
   }
-  
+  .buttonSeleccionado{
+    background-color: rgba(75, 75, 75, 0.9);
+    color: white;
+  }
   html {
     box-sizing: border-box;
     font-size: 62.5%;
@@ -43,8 +46,9 @@ button:hover{
   transform: scale(1.2);
 }
 
-.filtro .seleccionado{
-  background-color: gray;
+.filtro .buttonSeleccionado{
+  background-color: grayrgba(75, 75, 75, 0.9);
+  color: white;
 }
 
 .filtro .none{

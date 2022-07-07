@@ -3,6 +3,8 @@ const { cerrarVentana } = require("../helpers");
 require("dotenv").config();
 const URL = process.env.URL;
 
+const tarjeta = document.querySelector('.tarjeta');
+const contado = document.querySelector('.contado');
 const botonDia = document.querySelector('.botonDia');
 const botonMes = document.querySelector('.botonMes');
 const botonAnio = document.querySelector('.botonAnio');
@@ -17,6 +19,8 @@ const tbody = document.querySelector('tbody');
 const volver = document.querySelector('.volver');
 const total = document.querySelector('#total');
 
+let ventas = [];
+let tipoVenta = "CD";
 const fechaHoy = new Date();
 let d = fechaHoy.getDate();
 let m = fechaHoy.getMonth() + 1;
@@ -30,6 +34,24 @@ inputAnio.value = a;
 
 fecha.value = `${a}-${m}-${d}`;
 
+tarjeta.addEventListener('click',e=>{
+    if(!tarjeta.classList.contains('buttonSeleccionado')){
+        contado.classList.remove('buttonSeleccionado');
+        tarjeta.classList.add('buttonSeleccionado');
+        tipoVenta = "T";
+        listarVentas(ventas)
+    };
+});
+
+contado.addEventListener('click',e=>{
+    if(!contado.classList.contains('buttonSeleccionado')){
+        tarjeta.classList.remove('buttonSeleccionado');
+        contado.classList.add('buttonSeleccionado');
+        tipoVenta = "CD";
+        listarVentas(ventas)
+    };
+});
+
 botonMes.addEventListener('click',async e=>{
     seleccionado.classList.remove('seleccionado');
     seleccionado = botonMes;
@@ -37,7 +59,7 @@ botonMes.addEventListener('click',async e=>{
     dia.classList.add('none');
     anio.classList.add('none');
     seleccionado.classList.add('seleccionado');
-    const ventas = (await axios.get(`${URL}ventas/mes/${selectMes.value}`)).data;
+    ventas = (await axios.get(`${URL}ventas/mes/${selectMes.value}`)).data;
     listarVentas(ventas)
 });
 
@@ -48,7 +70,7 @@ botonDia.addEventListener('click',async e=>{
     mes.classList.add('none');
     anio.classList.add('none');
     seleccionado.classList.add('seleccionado');
-    const ventas = (await axios.get(`${URL}ventas/dia/${fecha.value}`)).data;
+    ventas = (await axios.get(`${URL}ventas/dia/${fecha.value}`)).data;
     const recibos = (await axios.get(`${URL}ventas/dia/${fecha.value}`)).data;
     listarVentas(ventas);
 });
@@ -60,10 +82,9 @@ botonAnio.addEventListener('click',async e=>{
     dia.classList.add('none');
     mes.classList.add('none');
     seleccionado.classList.add('seleccionado');
-    const ventas = (await axios.get(`${URL}ventas/anio/${inputAnio.value}`)).data;
+    ventas = (await axios.get(`${URL}ventas/anio/${inputAnio.value}`)).data;
     listarVentas(ventas);
 });
-let ventas;
 const inicia = async()=>{
     ventas = (await axios.get(`${URL}ventas/dia/${fecha.value}`)).data;
     const recibos = (await axios.get(`${URL}recibo/dia/${fecha.value}`)).data;
@@ -73,11 +94,14 @@ inicia( )
 
 
 listarVentas = (ventas)=>{
-    ventas = ventas.filter(venta=>venta.tipo_venta !== "CC")
+    if (tipoVenta === "CD") {
+        ventas = ventas.filter(venta=>venta.tipo_venta === "CD");
+    }else{
+        ventas = ventas.filter(venta=>venta.tipo_venta === "T");
+    }
     tbody.innerHTML = ``;
     let totalVenta = 0;
     ventas.forEach(venta => {
-        console.log(venta)
         const fecha = new Date(venta.fecha);
         const hora = fecha.getHours();
         const minutos = fecha.getMinutes();
@@ -85,7 +109,7 @@ listarVentas = (ventas)=>{
         segundos=segundos<10 ? `0${segundos}` : segundos;
         tbody.innerHTML += `
         <tr id="${venta.numero}" class="bold">
-            <td>${venta.numero}</td><td>${hora}:${minutos}:${segundos}</td><td>${venta.cliente}</td><td></td><td>${venta.tipo_comp !== "Recibo" ? venta.descripcion : "Recibo"}</td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
+            <td>${venta.numero}</td><td>${hora}:${minutos}:${segundos}</td><td>${venta.cliente}</td><td>${venta.tipo_venta}</td><td>${venta.tipo_comp !== "Recibo" ? venta.descripcion : "Recibo"}</td><td></td><td></td><td class="total">${venta.precio.toFixed(2)}</td>
         </tr>
         `;
         if (venta.listaProductos) {
@@ -117,20 +141,20 @@ volver.addEventListener('click',e=>{
 })
 
 selectMes.addEventListener('click',async e=>{
-    const ventas = (await axios.get(`${URL}ventas/mes/${selectMes.value}`)).data;
+    ventas = (await axios.get(`${URL}ventas/mes/${selectMes.value}`)).data;
     listarVentas(ventas);
 });
 
 inputAnio.addEventListener('keypress',async e=>{
     if (e.key === "Enter") {
-        const ventas = (await axios.get(`${URL}ventas/anio/${inputAnio.value}`)).data;
+        ventas = (await axios.get(`${URL}ventas/anio/${inputAnio.value}`)).data;
         listarVentas(ventas);
     }
 });
 
 fecha.addEventListener('keypress',async e=>{
     if ((e.key === "Enter")) {
-        const ventas = (await axios.get(`${URL}ventas/dia/${fecha.value}`)).data;
+        ventas = (await axios.get(`${URL}ventas/dia/${fecha.value}`)).data;
         listarVentas(ventas);
     }
 });

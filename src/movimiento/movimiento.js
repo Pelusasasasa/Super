@@ -78,7 +78,7 @@ const traerProductos = async(rubro,mes)=>{
             <td>${(mov.cantidad).toFixed(2)}</td>
             <td class="end">${(mov.precio).toFixed(2)}</td>
             <td class="end">${(mov.precio * mov.cantidad).toFixed(2)}</td>
-            <td>${hora}:${min}:${seg}</td>
+            <td>${mov.marca}</td>
         </tr>
     `;
 

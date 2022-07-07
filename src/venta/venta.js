@@ -268,6 +268,7 @@ const cargarMovimiento = async({cantidad,producto},numero,cliente)=>{
     movimiento.producto = producto.descripcion;
     movimiento.cliente = cliente
     movimiento.cantidad = cantidad;
+    movimiento.marca = producto.marca;
     movimiento.precio = parseFloat(redondear(producto.precio - (producto.precio * parseFloat(descuentoPor.value) / 100),2));
     movimiento.rubro = producto.rubro;
     movimiento.nro_venta = numero;
