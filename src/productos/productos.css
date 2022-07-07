@@ -137,6 +137,9 @@ button:hover{
 }
 
 /* Cambio producto */
+.cambio .flex{
+    display: flex;
+}
 .cambio main label{
     display: inline-block;
     width: 80%;

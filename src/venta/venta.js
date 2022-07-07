@@ -205,7 +205,6 @@ facturar.addEventListener('click',async e=>{
          await descontarStock(producto)
          //producto.producto.precio = producto.producto.precio - redondear((parseFloat(descuentoPor.value) * producto.producto.precio / 100,2));
      }
-     console.log(descuentoStock)
      await axios.put(`${URL}productos`,descuentoStock)
      await axios.post(`${URL}movimiento`,movimientos);
     //sumamos al cliente el saldo y agregamos la venta a la lista de venta

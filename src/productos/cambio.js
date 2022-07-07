@@ -6,6 +6,7 @@ const sweet = require('sweetalert2');
 const {apretarEnter} = require('../helpers')
 
 const codigo = document.querySelector('#codigo');
+const marca = document.querySelector('#marca');
 const descripcion = document.querySelector('#descripcion');
 const stockViejo = document.querySelector('#stockViejo');
 const stock = document.querySelector('#stock');
@@ -23,6 +24,7 @@ codigo.addEventListener('keypress',async e=>{
         producto = (await axios.get(`${URL}productos/${codigo.value}`)).data;
         if (producto !== "") {
             costo.value = producto.costo.toFixed(2);
+            marca.value = producto.marca;
             descripcion.value = producto.descripcion;
             stockViejo.value = producto.stock.toFixed(2);
             precio.value = producto.precio.toFixed(2);
