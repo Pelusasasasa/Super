@@ -3,6 +3,7 @@ const sweet = require('sweetalert2');
 const axios = require('axios');
 require("dotenv").config();
 const URL = process.env.URL;
+ipcRenderer.send('poner-cierre')
 
 document.addEventListener('keyup',e=>{
     if (e.keyCode === 112) {
@@ -26,18 +27,21 @@ document.addEventListener('keyup',e=>{
 
 const ventas = document.querySelector('.ventas');
 ventas.addEventListener('click',e=>{
-    location.href = "./venta/index.html"
+    location.href = "./venta/index.html";
+    ipcRenderer.send('sacar-cierre');
 })
 
 const productos = document.querySelector('.productos');
 productos.addEventListener('click',e=>{
     location.href = "./productos/productos.html";
+    ipcRenderer.send('sacar-cierre');
 })
 
 
 const clientes = document.querySelector('.clientes');
 clientes.addEventListener('click',e=>{
     location.href = "./clientes/clientes.html";
+    ipcRenderer.send('sacar-cierre');
 })
 
 const caja = document.querySelector('.caja');

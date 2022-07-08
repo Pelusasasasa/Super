@@ -49,6 +49,13 @@ ipcMain.on('enviar',(e,args)=>{
   ventanaPrincipal.webContents.send('recibir',JSON.stringify(args));
 });
 
+ipcMain.on('sacar-cierre',e=>{
+  ventanaPrincipal.setClosable(false);
+});
+
+ipcMain.on('poner-cierre',e=>{
+  ventanaPrincipal.setClosable(true);
+});
 
 ipcMain.on('abrir-ventana',(e,args)=>{
   abrirVentana(args.path,args.altura,args.ancho)
