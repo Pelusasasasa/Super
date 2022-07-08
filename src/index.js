@@ -102,7 +102,7 @@ const abrirVentana = (direccion,altura = 700,ancho = 1200)=>{
   nuevaVentana.loadFile(path.join(__dirname, `${direccion}`));
   nuevaVentana.setMenuBarVisibility(false)
   nuevaVentana.on('close',async()=>{
-    if (direccion === "./clientes/agregarCliente.html") {
+    if (direccion === "./clientes/agregarCliente.html" || direccion === "./productos/agregarProducto.html") {
       ventanaPrincipal.reload()
     }
   })
@@ -149,6 +149,17 @@ const hacerMenu = () => {
           label:"Imprimir Venta",
           click(){
             ventanaPrincipal.webContents.send('poner-numero');
+          }
+        }
+      ]
+    },
+    {
+      label:"Clientes",
+      submenu:[
+        {
+          label:"Agregar Cliente",
+          click(){
+            abrirVentana("clientes/agregarCliente.html",1200,900);
           }
         }
       ]
