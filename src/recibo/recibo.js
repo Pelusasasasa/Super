@@ -184,7 +184,7 @@ imprimir.addEventListener('click',async e=>{
 
 const descontarSaldoCliente =async(idCliente,precio)=>{
     const cliente = (await axios.get(`${URL}clientes/id/${idCliente}`)).data;
-    cliente.saldo = cliente.saldo - precio;
+    cliente.saldo = (cliente.saldo - precio).toFixed(2);
     await axios.put(`${URL}clientes/id/${idCliente}`,cliente);
 };
 

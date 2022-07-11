@@ -121,7 +121,6 @@ rubro.addEventListener('keypress',e=>{
             precio:parseFloat(precioU.value),
             rubro:rubro.value
         };
-        console.log(producto)
         listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         tbody.innerHTML += `
         <tr id=${producto._id}>
@@ -201,7 +200,7 @@ facturar.addEventListener('click',async e=>{
     venta.listaProductos = listaProductos;
     
      for (let producto of listaProductos){
-         await cargarMovimiento(producto,venta.numero,venta.cliente);
+         await cargarMovimiento(producto,venta.numero,venta.cliente,venta.tipo_venta);
          await descontarStock(producto)
          //producto.producto.precio = producto.producto.precio - redondear((parseFloat(descuentoPor.value) * producto.producto.precio / 100,2));
      }
@@ -262,8 +261,9 @@ const ponerEnCuentaHistorica = async(venta,saldo)=>{
 }
 
 //Cargamos el movimiento de producto a la BD
-const cargarMovimiento = async({cantidad,producto},numero,cliente)=>{
+const cargarMovimiento = async({cantidad,producto},numero,cliente,tipo_venta)=>{
     const movimiento = {};
+    movimiento.tipo_venta = tipo_venta;
     movimiento.codProd = producto._id;
     movimiento.producto = producto.descripcion;
     movimiento.cliente = cliente
@@ -340,7 +340,7 @@ tbody.addEventListener('click',e=>{
 const sumarSaldo = async(id,nuevoSaldo,venta)=>{
     const cliente = (await axios.get(`${URL}clientes/id/${id}`)).data;
     cliente.listaVentas.push(venta);
-    cliente.saldo = cliente.saldo + nuevoSaldo;
+    cliente.saldo = (cliente.saldo + nuevoSaldo).toFixed(2);
     await axios.put(`${URL}clientes/id/${id}`,cliente);
 
 }

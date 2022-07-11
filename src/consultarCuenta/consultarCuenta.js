@@ -89,7 +89,7 @@ tbodyVenta.addEventListener('click',async e=>{
         trSeleccionado && trSeleccionado.classList.remove('seleccionado')
         trSeleccionado = e.target.parentNode;
         trSeleccionado.classList.add('seleccionado')
-        const movimientos = (await axios.get(`${URL}movimiento/${id}`)).data;
+        const movimientos = (await axios.get(`${URL}movimiento/${id}/CC`)).data;
         tbodyProducto.innerHTML = "";
         listarProductos(movimientos)
     }
@@ -126,7 +126,7 @@ actualizar.addEventListener('click',async e=>{
     if(trSeleccionado){
         const cuentaCompensada = (await axios.get(`${URL}compensada/traerCompensada/id/${trSeleccionado.id}`)).data;
         const cuentaHistorica = (await axios.get(`${URL}historica/PorId/id/${trSeleccionado.id}`)).data;
-        const movimientos = (await axios.get(`${URL}movimiento/${trSeleccionado.id}`)).data;
+        const movimientos = (await axios.get(`${URL}movimiento/${trSeleccionado.id}/CC`)).data;
         const venta = (await axios.get(`${URL}ventas/id/${trSeleccionado.id}/CC`)).data;
         const  cliente = (await axios.get(`${URL}clientes/id/${cuentaCompensada.idCliente}`)).data;
         let total = 0;
@@ -144,25 +144,24 @@ actualizar.addEventListener('click',async e=>{
             total = parseFloat(total.toFixed(2));
             let cuentasHistoricasRestantes = (await axios.get(`${URL}historica/traerPorCliente/${cuentaHistorica.idCliente}`)).data;
             cuentasHistoricasRestantes = cuentasHistoricasRestantes.filter(cuenta=>(cuenta._id>cuentaHistorica._id && cuenta.fecha >= cuentaHistorica.fecha));
-            cliente.saldo -= cuentaCompensada.importe;
-
+            cliente.saldo -= parseFloat(cuentaCompensada.importe.toFixed(2));
+            console.log(cuentaCompensada.importe)
             cuentaCompensada.importe = total;
             cuentaCompensada.saldo = parseFloat((total - cuentaCompensada.pagado).toFixed(2));
             cuentaHistorica.saldo = parseFloat((cuentaHistorica.saldo - cuentaHistorica.debe+total).toFixed(2));
             cuentaHistorica.debe = parseFloat(total.toFixed(2));
             let saldoAnterior = cuentaHistorica.saldo;
-
+            cliente.saldo += parseFloat(cuentaCompensada.importe.toFixed(2));
             for await(let cuenta of cuentasHistoricasRestantes){
                 cuenta.saldo = cuenta.tipo_comp === "Recibo" ? parseFloat((saldoAnterior - cuenta.haber).toFixed(2)) : parseFloat((saldoAnterior + cuenta.debe).toFixed(2));
                 saldoAnterior = cuenta.saldo;
                 await axios.put(`${URL}historica/PorId/id/${cuenta._id}`,cuenta);
             };
-            cliente.saldo += cuentaCompensada.importe;
+            
             await axios.put(`${URL}movimiento`,movimientos);
             await axios.put(`${URL}clientes/id/${cliente._id}`,cliente);
             await axios.put(`${URL}ventas/id/${venta.numero}/CC`,venta);
             await axios.put(`${URL}compensada/traerCompensada/id/${cuentaCompensada.nro_venta}`,cuentaCompensada);
-            console.log(cuentaHistorica)
             await axios.put(`${URL}historica/PorId/id/${cuentaHistorica.nro_venta}`,cuentaHistorica);
             const cuentaModificada = (await axios.get(`${URL}compensada/traerCompensada/id/${trSeleccionado.id}`)).data;
             listarProductos(movimientos)
