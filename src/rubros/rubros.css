@@ -1,0 +1,39 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+      Arial, sans-serif;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+}
+  
+  html {
+    box-sizing: border-box;
+    font-size: 62.5%;
+  }
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+  body {
+    font-size: 1.6rem;
+    padding: 0 2rem;
+    background-color: burlywood;
+  }
+  
+.lista{
+    background-color: white;
+    height: 80vh;
+}
+
+.lista table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.lista table thead tr{
+    border: .1rem solid black;
+}
+
+.lista table tbody{
+    text-align: center;
+}

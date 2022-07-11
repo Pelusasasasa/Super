@@ -2,7 +2,7 @@ const salir = document.querySelector('.salir');
 const codigo = document.querySelector('#codigo');
 const descripcion = document.querySelector('#descripcion');
 const marca = document.querySelector('#marca');
-const rubro = document.querySelector('#rubro');
+const select = document.querySelector('#rubro');
 const stock = document.querySelector('#stock');
 const costo = document.querySelector('#costo');
 const impuesto = document.querySelector('#impuesto');
@@ -17,6 +17,17 @@ const axios = require('axios');
 require('dotenv').config()
 const URL = process.env.URL;
 
+const traerRubros = async()=>{
+    const rubros =  (await axios.get(`${URL}rubro`)).data;
+    for await(let {numero,rubro} of rubros){
+        const option = document.createElement('option');
+        option.text = numero + " - " + rubro,
+        option.value = rubro;
+        select.appendChild(option)
+    }
+}
+
+traerRubros();
 const {cerrarVentana,apretarEnter} = require('../helpers');
 
 impuesto.addEventListener('blur',e=>{
@@ -103,8 +114,11 @@ marca.addEventListener('focus',e=>{
     marca.select();
 });
 
-rubro.addEventListener('focus',e=>{
-    rubro.select();
+rubro.addEventListener('keypress',e=>{
+    if (e.key === "Enter") {
+        e.preventDefault();
+        stock.focus();
+    }
 });
 
 stock.addEventListener('focus',e=>{

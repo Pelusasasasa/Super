@@ -140,6 +140,12 @@ const hacerMenu = () => {
           }
         },
         {
+          label:"Rubros",
+          click(){
+            abrirVentana("rubros/rubros.html",1000,900)
+          }
+        },
+        {
           label:"Listado Saldos",
           click(){
             abrirVentana("clientes/listadoSaldo.html",1000,1200)
