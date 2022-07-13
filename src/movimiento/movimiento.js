@@ -21,14 +21,11 @@ desde.value = `${anio}-${mes}-${dia}`;
 hasta.value = `${anio}-${mes}-${dia}`;
 
 const inicia = async()=>{
-    const rubros = (await axios.get(`${URL}productos/rubro`)).data;
-    const rubrosSinRepetido = rubros.filter(function(rubro,p){
-        return rubros.indexOf(rubro)===p;
-    });
-    rubrosSinRepetido.forEach(rubro => {
+    const rubros = (await axios.get(`${URL}rubro`)).data;
+    rubros.forEach(rubro => {
         const option = document.createElement('option');
-        option.innerHTML = rubro;
-        option.value = rubro;
+        option.innerHTML = rubro.numero + "-" + rubro.rubro;
+        option.value = rubro.rubro;
         select.appendChild(option);
     });
     traerProductos(select.value);

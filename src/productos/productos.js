@@ -118,7 +118,7 @@ eliminar.addEventListener('click',async e=>{
 const body = document.querySelector('body');
 
 body.addEventListener('keypress',e=>{
-    if (e.key === "Enter"){
+    if (e.key === "Enter" && ventanaSecundaria){
         if (productoSeleccionado) {
             ipcRenderer.send('enviar',{
                         tipo:"producto",
@@ -126,7 +126,7 @@ body.addEventListener('keypress',e=>{
             });
             window.close();
         }else{
-            sweet.file({title:"Producto no seleccionado"});
+            sweet.fire({title:"Producto no seleccionado"});
         }
     }
 })

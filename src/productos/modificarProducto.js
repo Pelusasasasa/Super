@@ -9,7 +9,7 @@ const URL = process.env.URL;
 const codigo = document.querySelector('#codigo');
 const descripcion = document.querySelector('#descripcion');
 const marca = document.querySelector('#marca');
-const rubro = document.querySelector('#rubro');
+const select = document.querySelector('#rubro');
 const stock = document.querySelector('#stock');
 const costo = document.querySelector('#costo');
 const impuesto = document.querySelector('#impuesto');
@@ -38,9 +38,17 @@ document.addEventListener('keydown',e=>{
 })
 
 
-ipcRenderer.on('informacion',(e,args)=>{
+ipcRenderer.on('informacion',async (e,args)=>{
     const {informacion}= args;
-    llenarInputs(informacion)
+    const rubros = (await axios.get(`${URL}rubro`)).data;
+    for await(let {rubro,numero} of rubros){
+        const option = document.createElement('option');
+        option.text = numero + "-" + rubro;
+        option.id = numero;
+        option.value = rubro;
+        select.appendChild(option);
+    }
+    llenarInputs(informacion);
 })
 
 const llenarInputs = async(codigoProducto)=>{
@@ -49,7 +57,7 @@ const llenarInputs = async(codigoProducto)=>{
     descripcion.value = producto.descripcion;
     marca.value = producto.marca;
     stock.value = producto.stock;
-    rubro.value = producto.rubro;
+    select.value = producto.rubro;
     costo.value = producto.costo;
     impuesto.value = producto.impuesto;
     costoIva.value = (producto.costo + (producto.costo * producto.impuesto / 100)).toFixed(2);
@@ -91,8 +99,12 @@ marca.addEventListener('keypress',e=>{
     apretarEnter(e,rubro);
 });
 
-rubro.addEventListener('keypress',e=>{
-    apretarEnter(e,stock);
+rubro.addEventListener('keydown',e=>{
+    console.log(e.keyCode)
+    if (e.key === "Enter") {
+        e.preventDefault();
+        stock.focus();
+    }
 });
 
 stock.addEventListener('keypress',e=>{
@@ -132,7 +144,7 @@ marca.addEventListener('focus',e=>{
 });
 
 rubro.addEventListener('focus',e=>{
-    selecciona_value(rubro.id);
+   
 });
 
 stock.addEventListener('focus',e=>{

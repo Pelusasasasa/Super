@@ -117,8 +117,10 @@ const ponerVenta = async(cuenta)=>{
 
 //Cuando hago un click que seleccione el input
 let inputSeleccionado = tbody
+let trSeleccionado = "";
 tbody.addEventListener('click',e=>{
     const seleccion = e.target;
+    console.log(e.target)
     if (seleccion.nodeName === "INPUT") {
         inputSeleccionado = seleccion;
     }else if(seleccion.nodeName === "TD"){
@@ -128,17 +130,18 @@ tbody.addEventListener('click',e=>{
         inputSeleccionado = seleccion.children[4].children[0];
         inputSeleccionado.focus();
     }
+    trSeleccionado = inputSeleccionado.parentNode.parentNode;
     selecciona_value(inputSeleccionado.id);
 }),
 
 
 inputSeleccionado.addEventListener('keypress',e=>{
     if (e.key === "Enter") {
-        total.value = parseFloat(total.value) -  (parseFloat(inputSeleccionado.parentNode.parentNode.children[2].innerHTML) - parseFloat(inputSeleccionado.parentNode.parentNode.children[3].innerHTML) - parseFloat(inputSeleccionado.parentNode.parentNode.children[5].innerHTML));
-        inputSeleccionado.parentNode.parentNode.children[5].innerHTML = (parseFloat(inputSeleccionado.parentNode.parentNode.children[2].innerHTML) - parseFloat(inputSeleccionado.parentNode.parentNode.children[3].innerHTML) - parseFloat(inputSeleccionado.value)).toFixed(2);
+        total.value = parseFloat(total.value) -  (parseFloat(trSeleccionado.children[2].innerHTML) - parseFloat(inputSeleccionado.parentNode.parentNode.children[3].innerHTML) - parseFloat(inputSeleccionado.parentNode.parentNode.children[5].innerHTML));
+        trSeleccionado.children[5].innerHTML = (parseFloat(trSeleccionado.children[2].innerHTML) - parseFloat(trSeleccionado.children[3].innerHTML) - parseFloat(inputSeleccionado.value)).toFixed(2);
         total.value = parseFloat(total.value) + parseFloat(inputSeleccionado.value);
-        if (inputSeleccionado.parentNode.parentNode.nextElementSibling) {
-            inputSeleccionado = inputSeleccionado.parentNode.parentNode.nextElementSibling.children[4].children[0];
+        if (trSeleccionado.nextElementSibling) {
+            inputSeleccionado = trSeleccionado.nextElementSibling.children[4].children[0];
             inputSeleccionado.focus();                  
             selecciona_value(inputSeleccionado.id);
         };
@@ -177,7 +180,7 @@ imprimir.addEventListener('click',async e=>{
         }
     };
     await axios.put(`${URL}numero/Recibo`,{Recibo:recibo.numero})
-    //ipcRenderer.send('imprimir',[recibo,cliente,lista])
+    // ipcRenderer.send('imprimir',[recibo,cliente,lista])
     location.href = "../menu.html";
 });
 
@@ -196,12 +199,7 @@ const modificarCuentaCompensadas = async()=>{
         if (compensada !== "") {
             compensada.pagado = parseFloat((compensada.pagado + parseFloat(tr.children[4].children[0].value)).toFixed(2));
             compensada.saldo = parseFloat(tr.children[5].innerHTML).toFixed(2);
-
-            if (parseFloat(compensada.saldo) === 0) {
-                await axios.delete(`${URL}compensada/traerCompensada/id/${compensada._id}`);       
-            }else{
-                await axios.put(`${URL}compensada/traerCompensada/id/${compensada._id}`,compensada);
-            }
+            await axios.put(`${URL}compensada/traerCompensada/id/${compensada.nro_venta}`,compensada);
         }
     }
 };
