@@ -19,7 +19,7 @@ const buscador = document.querySelector('#buscarProducto');
 const eliminar = document.querySelector('.eliminar');
 
 const listar = (productos)=>{
-    console.log(productos)
+    tbody.innerHTML = ""
     productos.forEach(({_id,descripcion,marca,stock,precio})=>{
         tbody.innerHTML += `
             <tr id=${_id}>
@@ -44,7 +44,7 @@ const filtrar = async()=>{
     producto.length !== 0 && listar(producto);
 }
 filtrar();
-buscador.addEventListener('keyup',filtrar)
+buscador.addEventListener('keydown',filtrar)
 
 //cuando ahcemos un click en un tr lo ponemos como que esta seleccionado
 tbody.addEventListener('click',e=>{

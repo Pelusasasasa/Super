@@ -148,7 +148,7 @@ button:hover{
     width: 80%;
 }
 
-.precio fieldset{
+.precio fieldset,.costo fieldset{
     display: grid;
     grid-template-columns: 1fr 1fr;
 }

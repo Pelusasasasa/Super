@@ -346,9 +346,9 @@ const sumarSaldo = async(id,nuevoSaldo,venta)=>{
 }
 
 borrar.addEventListener('click',e=>{
-    total.value = redondear(totalGlobal -  parseFloat(seleccionado.children[4].innerHTML));
-    descuento.value = redondear(parseFloat(descuentoPor.value) * parseFloat(total.value) / 100);
-    total.value = redondear(parseFloat(total.value) - parseFloat(descuento.value));
+    total.value = redondear(totalGlobal -  parseFloat(seleccionado.children[4].innerHTML),2);
+    descuento.value = redondear((parseFloat(descuentoPor.value) * parseFloat(total.value) / 100),2);
+    total.value = redondear(parseFloat(total.value) - parseFloat(descuento.value),2);
     totalGlobal = parseFloat(total.value);
     listaProductos =  listaProductos.filter(({cantidad,producto})=>producto._id !== seleccionado.id);
     tbody.removeChild(seleccionado);

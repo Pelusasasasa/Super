@@ -127,7 +127,7 @@ const hacerMenu = () => {
     {
       label: "Cambio de producto",
       click(){
-        abrirVentana("productos/cambio.html",500,500)
+        abrirVentana("productos/cambio.html",650,900)
       }
     },
     {
