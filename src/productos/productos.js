@@ -44,7 +44,7 @@ const filtrar = async()=>{
     producto.length !== 0 && listar(producto);
 }
 filtrar();
-buscador.addEventListener('keydown',filtrar)
+buscador.addEventListener('keyup',filtrar)
 
 //cuando ahcemos un click en un tr lo ponemos como que esta seleccionado
 tbody.addEventListener('click',e=>{

@@ -45,6 +45,7 @@
     }
   },
   "dependencies": {
+    "@afipsdk/afip.js": "^0.7.3",
     "axios": "^0.26.1",
     "dotenv": "^16.0.1",
     "electron-reload": "^2.0.0-alpha.1",

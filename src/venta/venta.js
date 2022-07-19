@@ -4,7 +4,7 @@ const URL = process.env.URL;
 const sweet = require('sweetalert2');
 
 const { ipcRenderer } = require('electron');
-const {cerrarVentana,apretarEnter, selecciona_value, redondear} = require('../helpers');
+const {cerrarVentana,apretarEnter, selecciona_value, redondear,cargarFactura} = require('../helpers');
 
 //Parte Cliente
 const codigo = document.querySelector('#codigo');
@@ -183,6 +183,7 @@ const verTipoVenta = ()=>{
 
 
 facturar.addEventListener('click',async e=>{
+    
     const venta = {};
     venta.cliente = nombre.value;
     venta.fecha = new Date();
@@ -191,6 +192,9 @@ facturar.addEventListener('click',async e=>{
     venta.precio = parseFloat(total.value);
     venta.descuento = parseFloat(descuento.value);
     venta.tipo_venta = await verTipoVenta();
+    venta.cod_comp = 6;
+    venta.num_doc = 00000000;
+    venta.cod_doc = 99;
     venta.numero = venta.tipo_venta === "CC" ? (await axios.get(`${URL}numero`)).data["Cuenta Corriente"] + 1 : (await axios.get(`${URL}numero`)).data["Contado"] + 1;
     if (venta.tipo_venta === "CC") {
         await axios.put(`${URL}numero/Cuenta Corriente`,{"Cuenta Corriente":venta.numero});
@@ -198,26 +202,35 @@ facturar.addEventListener('click',async e=>{
         await axios.put(`${URL}numero/Contado`,{Contado:venta.numero});
     }
     venta.listaProductos = listaProductos;
-    
+    const [iva21,iva0,gravado21,gravado0,cantIva] = await sacarIva(listaProductos); //sacamos el iva de los productos
+    venta.iva21 =iva21;
+    venta.iva0 = iva0;
+    venta.gravado0 = gravado0;
+    venta.gravado21 = gravado21;
+    venta.cantIva = cantIva;
+    if (venta.tipo_venta === "T") {
+        //cargamos la fatura si es tarjeta
+        await cargarFactura(venta); 
+    }
      for (let producto of listaProductos){
          await cargarMovimiento(producto,venta.numero,venta.cliente,venta.tipo_venta);
-         await descontarStock(producto)
+         await descontarStock(producto);
          //producto.producto.precio = producto.producto.precio - redondear((parseFloat(descuentoPor.value) * producto.producto.precio / 100,2));
      }
      await axios.put(`${URL}productos`,descuentoStock)
      await axios.post(`${URL}movimiento`,movimientos);
     //sumamos al cliente el saldo y agregamos la venta a la lista de venta
-     venta.tipo_venta === "CC" && sumarSaldo(venta.idCliente,venta.precio,venta.numero);
+     venta.tipo_venta === "CC" && await sumarSaldo(venta.idCliente,venta.precio,venta.numero);
     
     //Ponemos en la cuenta conpensada si es CC
-     venta.tipo_venta === "CC" && ponerEnCuentaCompensada(venta);
-     venta.tipo_venta === "CC" && ponerEnCuentaHistorica(venta,parseFloat(saldo.value));
+     venta.tipo_venta === "CC" && await ponerEnCuentaCompensada(venta);
+     venta.tipo_venta === "CC" && await ponerEnCuentaHistorica(venta,parseFloat(saldo.value));
 
      const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
 
      await axios.post(`${URL}ventas`,venta);
      //ipcRenderer.send('imprimir',[venta,cliente,movimientos]);
-     location.reload();
+    location.reload();
 })
 
 //Lo que hacemos es listar el cliente traido
@@ -342,8 +355,29 @@ const sumarSaldo = async(id,nuevoSaldo,venta)=>{
     cliente.listaVentas.push(venta);
     cliente.saldo = (cliente.saldo + nuevoSaldo).toFixed(2);
     await axios.put(`${URL}clientes/id/${id}`,cliente);
+};
 
+const sacarIva = (lista) => {
+    let totalIva0 = 0
+    let totalIva21=0
+    let gravado21 = 0 
+    let gravado0 = 0 
+    lista.forEach(({producto,cantidad}) =>{
+        if (producto.impuesto !== 0) {
+            gravado21 += cantidad*producto.precio/1.21;
+            totalIva21 += cantidad*producto.precio - producto.precio/1.21;
+        }else{
+            gravado0 += parseFloat(cantidad)*(parseFloat(producto.precio/1));
+            totalIva0 += parseFloat(cantidad)*(parseFloat(producto.precio)-(parseFloat(producto.precio))/1);
+        }
+    })
+    let cantIva = 1
+    if (gravado0 !== 0 && gravado21 !== 0) {
+        cantIva = 2;
+    }
+    return [parseFloat(totalIva21.toFixed(2)),parseFloat(totalIva0.toFixed(2)),parseFloat(gravado21.toFixed(2)),parseFloat(gravado0.toFixed(2)),cantIva]
 }
+
 
 borrar.addEventListener('click',e=>{
     total.value = redondear(totalGlobal -  parseFloat(seleccionado.children[4].innerHTML),2);
