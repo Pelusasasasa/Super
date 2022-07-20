@@ -37,6 +37,7 @@ const listar = (productos)=>{
         tr.appendChild(tdPrecio);
         tr.appendChild(tdStock);
         tr.appendChild(tdMarca);
+        tr.id = _id
         tbody.appendChild(tr);
     })
 }

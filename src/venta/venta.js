@@ -221,36 +221,36 @@ facturar.addEventListener('click',async e=>{
         //cargamos la fatura si es tarjeta
         alerta.classList.remove('none')
         try {
-            await cargarFactura(venta);    
+            await cargarFactura(venta);
+            for (let producto of listaProductos){
+                await cargarMovimiento(producto,venta.numero,venta.cliente,venta.tipo_venta);
+                await descontarStock(producto);
+                //producto.producto.precio = producto.producto.precio - redondear((parseFloat(descuentoPor.value) * producto.producto.precio / 100,2));
+            }
+            await axios.put(`${URL}productos`,descuentoStock)
+            await axios.post(`${URL}movimiento`,movimientos);
+           //sumamos al cliente el saldo y agregamos la venta a la lista de venta
+            venta.tipo_venta === "CC" && await sumarSaldo(venta.idCliente,venta.precio,venta.numero);
+           
+           //Ponemos en la cuenta conpensada si es CC
+            venta.tipo_venta === "CC" && await ponerEnCuentaCompensada(venta);
+            venta.tipo_venta === "CC" && await ponerEnCuentaHistorica(venta,parseFloat(saldo.value));
+       
+            const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
+       
+            await axios.post(`${URL}ventas`,venta);
+            //ipcRenderer.send('imprimir',[venta,cliente,movimientos]);
+            location.reload();  
         } catch (error) {
-            sweet.fire({
+            
+            await sweet.fire({
                 title:"No se pudo generar la venta"
             });
+            console.log(error)
         }finally{
             alerta.classList.add('none');
         }
     };
-
-
-     for (let producto of listaProductos){
-         await cargarMovimiento(producto,venta.numero,venta.cliente,venta.tipo_venta);
-         await descontarStock(producto);
-         //producto.producto.precio = producto.producto.precio - redondear((parseFloat(descuentoPor.value) * producto.producto.precio / 100,2));
-     }
-     await axios.put(`${URL}productos`,descuentoStock)
-     await axios.post(`${URL}movimiento`,movimientos);
-    //sumamos al cliente el saldo y agregamos la venta a la lista de venta
-     venta.tipo_venta === "CC" && await sumarSaldo(venta.idCliente,venta.precio,venta.numero);
-    
-    //Ponemos en la cuenta conpensada si es CC
-     venta.tipo_venta === "CC" && await ponerEnCuentaCompensada(venta);
-     venta.tipo_venta === "CC" && await ponerEnCuentaHistorica(venta,parseFloat(saldo.value));
-
-     const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
-
-     await axios.post(`${URL}ventas`,venta);
-     //ipcRenderer.send('imprimir',[venta,cliente,movimientos]);
-     location.reload();
 })
 
 //Lo que hacemos es listar el cliente traido
