@@ -41,9 +41,8 @@ funciones.cargarFactura = async (venta)=>{
     const fecha = new Date(Date.now()-((new Date()).getTimezoneOffset()*60000)).toISOString().split('T')[0];
     const serverStatus = await afip.ElectronicBilling.getServerStatus();
     console.log(serverStatus)
-    let ultimaElectronica = await afip.ElectronicBilling.getLastVoucher('2',venta.cod_comp);
+    let ultimaElectronica = await afip.ElectronicBilling.getLastVoucher('3',venta.cod_comp);
     console.log(ultimaElectronica);
-    
     let data = {
         'cantReg':1,
         'CbteTipo':venta.cod_comp,
@@ -60,24 +59,9 @@ funciones.cargarFactura = async (venta)=>{
         'ImpIVA': parseFloat((venta.iva21+venta.iva0 ).toFixed(2)), //Importe total de IVA
         'ImpTrib': 0,
         'MonId': 'PES',
-        'PtoVta': 2,//ver
+        'PtoVta': 3,//ver
         'MonCotiz' 	: 1,
-        'Iva':[]
     };
-
-    if (venta.iva21 !== 0) {
-        data.Iva.push({
-            'Id':5,
-            'BaseImp':venta.gravado21,
-            'Importe':venta.iva21
-        })
-    };
-
-    data.Iva.push({
-        'Id':3,
-        'BaseImp':venta.gravado0,
-        'Importe':venta.iva0
-    })
     console.log(data)
     const res = await afip.ElectronicBilling.createVoucher(data); //creamos la factura electronica
     console.log(res)

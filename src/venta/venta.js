@@ -30,6 +30,11 @@ const cuentaCorrientediv = document.querySelector('.cuentaCorriente');
 const facturar = document.querySelector('.facturar');
 const borrar = document.querySelector(".borrar");
 
+//alerta
+const alerta = document.querySelector('.alerta');
+const spinner = document.querySelector('.spinner');
+
+
 let movimientos = [];
 let descuentoStock = [];
 let totalGlobal = 0;
@@ -119,7 +124,8 @@ rubro.addEventListener('keypress',e=>{
         const producto = {
             descripcion:codBarra.value.toUpperCase(),
             precio:parseFloat(precioU.value),
-            rubro:rubro.value
+            rubro:rubro.value,
+            impuesto:0
         };
         listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         tbody.innerHTML += `
@@ -192,9 +198,6 @@ facturar.addEventListener('click',async e=>{
     venta.precio = parseFloat(total.value);
     venta.descuento = parseFloat(descuento.value);
     venta.tipo_venta = await verTipoVenta();
-    venta.cod_comp = 6;
-    venta.num_doc = 00000000;
-    venta.cod_doc = 99;
     venta.numero = venta.tipo_venta === "CC" ? (await axios.get(`${URL}numero`)).data["Cuenta Corriente"] + 1 : (await axios.get(`${URL}numero`)).data["Contado"] + 1;
     if (venta.tipo_venta === "CC") {
         await axios.put(`${URL}numero/Cuenta Corriente`,{"Cuenta Corriente":venta.numero});
@@ -202,16 +205,33 @@ facturar.addEventListener('click',async e=>{
         await axios.put(`${URL}numero/Contado`,{Contado:venta.numero});
     }
     venta.listaProductos = listaProductos;
+    //Ponemos propiedades para la factura electronica
+    venta.cod_comp = 11;
+    venta.num_doc = 00000000;
+    venta.cod_doc = 99;
     const [iva21,iva0,gravado21,gravado0,cantIva] = await sacarIva(listaProductos); //sacamos el iva de los productos
     venta.iva21 =iva21;
     venta.iva0 = iva0;
     venta.gravado0 = gravado0;
     venta.gravado21 = gravado21;
     venta.cantIva = cantIva;
+
+
     if (venta.tipo_venta === "T") {
         //cargamos la fatura si es tarjeta
-        await cargarFactura(venta); 
-    }
+        alerta.classList.remove('none')
+        try {
+            await cargarFactura(venta);    
+        } catch (error) {
+            sweet.fire({
+                title:"No se pudo generar la venta"
+            });
+        }finally{
+            alerta.classList.add('none');
+        }
+    };
+
+
      for (let producto of listaProductos){
          await cargarMovimiento(producto,venta.numero,venta.cliente,venta.tipo_venta);
          await descontarStock(producto);
@@ -230,7 +250,7 @@ facturar.addEventListener('click',async e=>{
 
      await axios.post(`${URL}ventas`,venta);
      //ipcRenderer.send('imprimir',[venta,cliente,movimientos]);
-    location.reload();
+     location.reload();
 })
 
 //Lo que hacemos es listar el cliente traido

@@ -21,15 +21,23 @@ const eliminar = document.querySelector('.eliminar');
 const listar = (productos)=>{
     tbody.innerHTML = ""
     productos.forEach(({_id,descripcion,marca,stock,precio})=>{
-        tbody.innerHTML += `
-            <tr id=${_id}>
-                <td>${_id}</td>
-                <td>${descripcion}</td>
-                <td>${precio.toFixed(2)}</td>
-                <td>${stock.toFixed(2)}</td>
-                <td>${marca}</td>
-            </tr>
-        ` 
+        const tr = document.createElement('tr');
+        const tdId = document.createElement('td');
+        tdId.innerHTML = _id;
+        const tdDescripcion = document.createElement('td');
+        tdDescripcion.innerHTML = descripcion;
+        const tdPrecio = document.createElement('td');
+        tdPrecio.innerHTML = precio;
+        const tdStock = document.createElement('td');
+        tdStock.innerHTML = stock;
+        const tdMarca = document.createElement('td');
+        tdMarca.innerHTML = marca;
+        tr.appendChild(tdId);
+        tr.appendChild(tdDescripcion);
+        tr.appendChild(tdPrecio);
+        tr.appendChild(tdStock);
+        tr.appendChild(tdMarca);
+        tbody.appendChild(tr);
     })
 }
 
