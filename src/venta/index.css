@@ -82,6 +82,11 @@ body {
   font-size: 1.7rem;
 }
 
+.parteProductos .buscarProductos #rubro{
+  padding: .5rem;
+  font-size: 1.5rem;
+}
+
 .w-100{
   width: 108%;
 }

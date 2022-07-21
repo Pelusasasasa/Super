@@ -15,10 +15,10 @@ const direccion = document.querySelector('#direccion');
 
 const cantidad = document.querySelector('#cantidad');
 const codBarra = document.querySelector('#cod-barra')
-const descripcion = document.querySelector('#descripcion');
 const precioU = document.querySelector('#precio-U');
 const rubro = document.querySelector('#rubro');
 const tbody = document.querySelector('.tbody');
+const select = document.querySelector('#rubro');
 
 //parte totales
 const total = document.querySelector('#total');
@@ -39,9 +39,16 @@ let movimientos = [];
 let descuentoStock = [];
 let totalGlobal = 0;
 
-//Por defecto ponemos el A Consumidor Final
+//Por defecto ponemos el A Consumidor Final y tambien el select
 const ponerClienteDefault = async()=>{
-    listarCliente(1)
+    listarCliente(1);
+    const rubros = (await axios.get(`${URL}rubro`)).data;
+    for await(let {rubro,numero} of rubros){
+        const option = document.createElement('option');
+        option.text = numero + "-" + rubro;
+        option.value = rubro;
+        select.appendChild(option);
+    }
 };
 
 
@@ -121,6 +128,7 @@ precioU.addEventListener('keypress',e=>{
 
 rubro.addEventListener('keypress',e=>{
     if (e.key === "Enter") {
+        e.preventDefault();
         const producto = {
             descripcion:codBarra.value.toUpperCase(),
             precio:parseFloat(precioU.value),
@@ -215,13 +223,13 @@ facturar.addEventListener('click',async e=>{
     venta.gravado0 = gravado0;
     venta.gravado21 = gravado21;
     venta.cantIva = cantIva;
-
-
-    if (venta.tipo_venta === "T") {
-        //cargamos la fatura si es tarjeta
-        alerta.classList.remove('none')
         try {
-            await cargarFactura(venta);
+            if (venta.tipo_venta === "T") {
+                //cargamos la fatura si es tarjeta
+                alerta.classList.remove('none');
+                await cargarFactura(venta);
+            }
+            
             for (let producto of listaProductos){
                 await cargarMovimiento(producto,venta.numero,venta.cliente,venta.tipo_venta);
                 await descontarStock(producto);
@@ -250,7 +258,6 @@ facturar.addEventListener('click',async e=>{
         }finally{
             alerta.classList.add('none');
         }
-    };
 })
 
 //Lo que hacemos es listar el cliente traido
