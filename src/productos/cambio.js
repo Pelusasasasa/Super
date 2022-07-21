@@ -88,8 +88,6 @@ guardar.addEventListener('click',async e=>{
     producto.impuesto = nuevoIva.value !== "" ? parseFloat(nuevoIva.value) : producto.impuesto;
     producto.stock = stock.value !== "" ? parseFloat(stock.value) : producto.stock;
     producto.descripcion = descripcion.value !== "" ? descripcion.value : producto.descripcion;
-    console.log(producto);
-    asdasdads
     const {mensaje,estado} =(await axios.put(`${URL}productos/${producto._id}`,producto)).data;
     await sweet.fire({
         title:mensaje
