@@ -96,30 +96,34 @@ cantidad.addEventListener('keydown',e=>{
 
 let listaProductos = [];
 
-codBarra.addEventListener('keydown',async e=>{
+codBarra.addEventListener('keypress',async e=>{
     if(e.key === "Enter" && codBarra.value !== ""){
         listarProducto(codBarra.value);
     }else if(e.key === "Enter" && codBarra.value === ""){
-        const opciones = {
-            path: "./productos/productos.html",
-            botones: false
-        }
-        ipcRenderer.send('abrir-ventana',opciones);
+        //Esto abre una ventana donde lista todos los productos
+        // const opciones = {
+        //     path: "./productos/productos.html",
+        //     botones: false
+        // }
+        // ipcRenderer.send('abrir-ventana',opciones);
+
+        precioU.focus();
     }
 });
 
-codBarra.addEventListener('keyup',e=>{
+codBarra.addEventListener('keypress',e=>{
     if(e.keyCode === 37){
         cantidad.focus();
     }
 });
 
-precioU.addEventListener('keypress',e=>{
+precioU.addEventListener('keypress',async e=>{
     if ((e.key === "Enter")) {
         if (precioU.value !== "") {
-            rubro.focus();   
+            crearProducto()
+            // rubro.focus();   
         }else{
-            sweet.fire({
+            await sweet.fire({
                 title:"Poner un precio al Producto",
             });
         }
@@ -127,15 +131,22 @@ precioU.addEventListener('keypress',e=>{
 });
 
 rubro.addEventListener('keypress',e=>{
+    console.log(e.key)
     if (e.key === "Enter") {
         e.preventDefault();
-        const producto = {
-            descripcion:codBarra.value.toUpperCase(),
-            precio:parseFloat(precioU.value),
-            rubro:rubro.value,
-            impuesto:0
-        };
-        listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
+        precioU.focus();
+    }
+});
+
+const crearProducto = ()=>{
+    const producto = {
+        descripcion:codBarra.value.toUpperCase(),
+        precio:parseFloat(precioU.value),
+        rubro:rubro.value,
+        impuesto:0
+    };
+
+    listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         tbody.innerHTML += `
         <tr id=${producto._id}>
             <td>${cantidad.value}</td>
@@ -146,14 +157,14 @@ rubro.addEventListener('keypress',e=>{
         </tr>
     `;
 
-        total.value = redondear((parseFloat(total.value) + parseFloat(precioU.value) * parseFloat(cantidad.value)),2);
-        totalGlobal = parseFloat(total.value);
-        cantidad.value = "1.00";
-        codBarra.value = "";
-        precioU.value = ""
-        codBarra.focus();
-    }
-})
+    total.value = redondear((parseFloat(total.value) + parseFloat(precioU.value) * parseFloat(cantidad.value)),2);
+    totalGlobal = parseFloat(total.value);
+    cantidad.value = "1.00";
+    codBarra.value = "";
+    precioU.value = "";
+    rubro.value = "";
+    codBarra.focus();
+};
 
 const volver = document.querySelector('.volver');
 volver.addEventListener('click',()=>{
@@ -414,6 +425,7 @@ borrar.addEventListener('click',e=>{
     listaProductos =  listaProductos.filter(({cantidad,producto})=>producto._id !== seleccionado.id);
     tbody.removeChild(seleccionado);
     seleccionado = "";
+    codBarra.focus();
 });
 
 codigo.addEventListener('focus',e=>{
