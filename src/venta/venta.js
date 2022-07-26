@@ -206,9 +206,9 @@ const verTipoVenta = ()=>{
     return retornar;
 }
 
-
+console.log(alerta)
 facturar.addEventListener('click',async e=>{
-    
+    alerta.classList.remove('none');
     const venta = {};
     venta.cliente = nombre.value;
     venta.fecha = new Date();
@@ -239,8 +239,9 @@ facturar.addEventListener('click',async e=>{
                 //cargamos la fatura si es tarjeta
                 alerta.classList.remove('none');
                 await cargarFactura(venta);
+            }else{
+                alerta.children[1].innerHTML = "Generando Venta";
             }
-            
             for (let producto of listaProductos){
                 await cargarMovimiento(producto,venta.numero,venta.cliente,venta.tipo_venta);
                 await descontarStock(producto);
