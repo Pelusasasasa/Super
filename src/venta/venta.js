@@ -145,7 +145,7 @@ const crearProducto = ()=>{
         descripcion:codBarra.value.toUpperCase(),
         precio:parseFloat(precioU.value),
         rubro:rubro.value,
-        _id:`${idProducto}`,
+        idTabla:`${idProducto}`,
         impuesto:0
     };
 
@@ -211,8 +211,6 @@ const verTipoVenta = ()=>{
 
 facturar.addEventListener('click',async e=>{
     alerta.classList.remove('none');
-    console.log(listaProductos)
-    asdasdasdasd
     const venta = {};
     venta.cliente = nombre.value;
     venta.fecha = new Date();
@@ -333,6 +331,7 @@ const cargarMovimiento = async({cantidad,producto},numero,cliente,tipo_venta)=>{
 
 //Descontamos el stock
 const descontarStock = async({cantidad,producto})=>{
+    delete producto.idTabla;
     producto.stock -= cantidad;
     descuentoStock.push(producto)
 }
@@ -344,16 +343,21 @@ const listarProducto =async(id)=>{
         producto = producto === "" ? (await axios.get(`${URL}productos/buscar/porNombre/${id}`)).data : producto;
         if (producto !== "") {
        const productoYaUsado = listaProductos.find(({producto: product})=>{
+        console.log(product._id)
+        console.log(producto._id)
            if (product._id === producto._id) {
                return product
            };
         });
+        console.log(!productoYaUsado)
         if(producto !== "" && !productoYaUsado){
         listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         codBarra.value = producto._id;
         precioU.value = redondear(producto.precio,2);
+        idProducto++;
+        producto.idTabla = idProducto;
         tbody.innerHTML += `
-        <tr id=${producto._id}>
+        <tr id=${producto.idTabla}>
             <td>${cantidad.value}</td>
             <td>${codBarra.value}</td>
             <td>${producto.descripcion.toUpperCase()}</td>
@@ -365,7 +369,8 @@ const listarProducto =async(id)=>{
         totalGlobal = parseFloat(total.value);
         }else if(producto !== "" && productoYaUsado){
             productoYaUsado.cantidad += parseFloat(cantidad.value)
-            const tr = document.getElementById(producto._id);
+            producto.idTabla = productoYaUsado.producto.idTabla;
+            const tr = document.getElementById(producto.idTabla);
             tr.children[0].innerHTML = redondear(parseFloat(tr.children[0].innerHTML) + parseFloat(cantidad.value),2);
             tr.children[4].innerHTML = redondear(parseFloat(tr.children[0].innerHTML) * producto.precio,2);
             total.value = redondear(parseFloat(total.value) + (parseFloat(cantidad.value) * producto.precio),2);

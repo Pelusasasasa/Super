@@ -15,7 +15,7 @@ const cancelar = document.querySelector('.cancelar');
 const tbody = document.querySelector('tbody');
 const total = document.querySelector('#total');
 const imprimir = document.querySelector('.imprimir');
-const saldoFavor = document.querySelector('#saldoFavor');
+const entregado = document.querySelector('#entregado');
 
 
 
@@ -147,34 +147,46 @@ inputSeleccionado.addEventListener('keypress',e=>{
 
         //para sacar el disabled del saldo a favor
         if (parseFloat(total.value) === parseFloat(saldo.value)) {
-            saldoFavor.removeAttribute('disabled');
+            entregado.removeAttribute('disabled');
         }
 
     };
 });
 
-saldoFavor.addEventListener('focus',e=>{
-    saldoFavor.select();
+entregado.addEventListener('focus',e=>{
+    entregado.select();
 })
 
-saldoFavor.addEventListener('keypress',async e=>{
-    if (e.key === "Enter" && (saldoFavor.value !== "" && parseFloat(saldoFavor.value) !== 0)) {
-        let saldo = parseFloat(saldoFavor.value);
-        const trs = document.querySelectorAll('tbody tr');
+entregado.addEventListener('keypress',async e=>{
+    const trs = document.querySelectorAll('tbody tr');
+    if (e.key === "Enter" && (entregado.value !== "" && parseFloat(entregado.value) !== 0)) {
+        let saldo = parseFloat(entregado.value);
         for await(let tr of trs){
             const hijo = tr.children;
-            console.log(saldo)
             if (saldo !== 0) {
                 if (saldo >= parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML)) {
-                    hijo[4].children[0].value = parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML);
-                    hijo[5].innerHTML = parseFloat(hijo[5].innerHTML) - parseFloat(hijo[4].children[0].value);
-                    saldo = saldo - parseFloat(hijo[4].children[0].value);
+                    hijo[4].children[0].value = (parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML)).toFixed(2);
+                    hijo[5].innerHTML = (parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML) - parseFloat(hijo[4].children[0].value)).toFixed(2);
+                    saldo = parseFloat((saldo - parseFloat(hijo[4].children[0].value)).toFixed(2));
                 }else{
                     hijo[4].children[0].value = saldo;
+                    hijo[5].innerHTML = (parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML) - parseFloat(hijo[4].children[0].value)).toFixed(2);
                     saldo = 0;
                 }
-            }
+            }else{
+                hijo[4].children[0].value = saldo;
+                hijo[5].innerHTML = (parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML) - parseFloat(hijo[4].children[0].value)).toFixed(2);
+            };
+            console.log(saldo)
         }
+        total.value = entregado.value;
+    }else if(e.key === "Enter" && (parseFloat(entregado.value) === 0 || entregado.value === "")){
+        for await(let tr of trs){
+            const hijo = tr.children;
+            hijo[4].children[0].value = 0;
+            hijo[5].innerHTML = (parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML)).toFixed(2);
+        };
+        total.value = entregado.value;
     }
 })
 
