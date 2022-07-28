@@ -18,6 +18,7 @@ const imprimir = document.querySelector('.imprimir');
 const saldoFavor = document.querySelector('#saldoFavor');
 
 
+
 const hoy = new Date();
 let d = hoy.getDate();
 let m = hoy.getMonth() + 1;
@@ -102,14 +103,13 @@ const ponerVenta = async(cuenta)=>{
     dia = dia<10 ? `0${dia}` : dia;
     mes = mes<10 ? `0${mes}` : mes;
     mes = mes === 13 ? 1 : mes;
-
     tbody.innerHTML += `
-        <tr class="${cuenta._id}">
+        <tr class="${cuenta.nro_venta}">
             <td>${dia}/${mes}/${anio}</td>
             <td>${cuenta.nro_venta}</td>
             <td>${cuenta.importe}</td>
             <td>${(cuenta.pagado).toFixed(2)}</td>
-            <td><input id="${cuenta._id}" type="text" value="0.00" /></td>
+            <td><input id="${cuenta.nro_venta}" type="number" value="0.00" /></td>
             <td>${(cuenta.saldo).toFixed(2)}</td>
         </tr>
     `
@@ -120,7 +120,6 @@ let inputSeleccionado = tbody
 let trSeleccionado = "";
 tbody.addEventListener('click',e=>{
     const seleccion = e.target;
-    console.log(e.target)
     if (seleccion.nodeName === "INPUT") {
         inputSeleccionado = seleccion;
     }else if(seleccion.nodeName === "TD"){
@@ -132,8 +131,7 @@ tbody.addEventListener('click',e=>{
     }
     trSeleccionado = inputSeleccionado.parentNode.parentNode;
     selecciona_value(inputSeleccionado.id);
-}),
-
+});
 
 inputSeleccionado.addEventListener('keypress',e=>{
     if (e.key === "Enter") {
@@ -141,7 +139,8 @@ inputSeleccionado.addEventListener('keypress',e=>{
         trSeleccionado.children[5].innerHTML = (parseFloat(trSeleccionado.children[2].innerHTML) - parseFloat(trSeleccionado.children[3].innerHTML) - parseFloat(inputSeleccionado.value)).toFixed(2);
         total.value = parseFloat(total.value) + parseFloat(inputSeleccionado.value);
         if (trSeleccionado.nextElementSibling) {
-            inputSeleccionado = trSeleccionado.nextElementSibling.children[4].children[0];
+            trSeleccionado = trSeleccionado.nextElementSibling;
+            inputSeleccionado = trSeleccionado.children[4].children[0];
             inputSeleccionado.focus();                  
             selecciona_value(inputSeleccionado.id);
         };
@@ -153,6 +152,31 @@ inputSeleccionado.addEventListener('keypress',e=>{
 
     };
 });
+
+saldoFavor.addEventListener('focus',e=>{
+    saldoFavor.select();
+})
+
+saldoFavor.addEventListener('keypress',async e=>{
+    if (e.key === "Enter" && (saldoFavor.value !== "" && parseFloat(saldoFavor.value) !== 0)) {
+        let saldo = parseFloat(saldoFavor.value);
+        const trs = document.querySelectorAll('tbody tr');
+        for await(let tr of trs){
+            const hijo = tr.children;
+            console.log(saldo)
+            if (saldo !== 0) {
+                if (saldo >= parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML)) {
+                    hijo[4].children[0].value = parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML);
+                    hijo[5].innerHTML = parseFloat(hijo[5].innerHTML) - parseFloat(hijo[4].children[0].value);
+                    saldo = saldo - parseFloat(hijo[4].children[0].value);
+                }else{
+                    hijo[4].children[0].value = saldo;
+                    saldo = 0;
+                }
+            }
+        }
+    }
+})
 
 imprimir.addEventListener('click',async e=>{
     const recibo = {};

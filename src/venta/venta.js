@@ -38,6 +38,7 @@ const spinner = document.querySelector('.spinner');
 let movimientos = [];
 let descuentoStock = [];
 let totalGlobal = 0;
+let idProducto = 0;
 
 //Por defecto ponemos el A Consumidor Final y tambien el select
 const ponerClienteDefault = async()=>{
@@ -139,16 +140,18 @@ rubro.addEventListener('keypress',e=>{
 });
 
 const crearProducto = ()=>{
+    idProducto++;
     const producto = {
         descripcion:codBarra.value.toUpperCase(),
         precio:parseFloat(precioU.value),
         rubro:rubro.value,
+        _id:`${idProducto}`,
         impuesto:0
     };
 
     listaProductos.push({cantidad:parseFloat(cantidad.value),producto});
         tbody.innerHTML += `
-        <tr id=${producto._id}>
+        <tr id=${idProducto}>
             <td>${cantidad.value}</td>
             <td></td>
             <td>${codBarra.value.toUpperCase()}</td>
@@ -206,9 +209,10 @@ const verTipoVenta = ()=>{
     return retornar;
 }
 
-console.log(alerta)
 facturar.addEventListener('click',async e=>{
     alerta.classList.remove('none');
+    console.log(listaProductos)
+    asdasdasdasd
     const venta = {};
     venta.cliente = nombre.value;
     venta.fecha = new Date();

@@ -16,20 +16,8 @@ funciones.apretarEnter = async (e,input)=>{
 }
 
 funciones.selecciona_value = (idInput)=>{
-    valor_input = document.getElementById(idInput).value;
-    longitud = valor_input.length;
-    var selectionEnd = 0 + 1;
-    if (document.getElementById(idInput).setSelectionRange) {
-    document.getElementById(idInput).focus();
-    document.getElementById(idInput).setSelectionRange (0, longitud);
-    }
-    else if (input.createTextRange) {
-    var range = document.getElementById(idInput).createTextRange() ;
-    range.collapse(true);
-    range.moveEnd('character', 0);
-    range.moveStart('character', longitud);
-    range.select();
-    }
+    const seleccionado = document.getElementById(idInput);
+    seleccionado.select();
 }
 
 funciones.redondear = (numero,decimales)=>{

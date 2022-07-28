@@ -28,7 +28,6 @@ buscar.addEventListener('keypress',async e=>{
                 buscar.focus();
             }else{
                 const ventas = (await axios.get(`${URL}compensada/traerCompensadas/${cliente._id}`)).data;
-                console.log(ventas)
                 listarVentas(ventas);
             }
         }else{
@@ -133,8 +132,10 @@ actualizar.addEventListener('click',async e=>{
         for await(let movimiento of movimientos){
             const precio = (await axios.get(`${URL}productos/traerPrecio/${movimiento.codProd}`)).data;
             movimiento.precio = precio !== "" ? precio : movimiento.precio;
-            total += (precio*movimiento.cantidad);
+            total += (movimiento.precio*movimiento.cantidad);
         };
+        console.log(total)
+        
         sweet.fire({
             title:"Grabar Importe?",
             "showCancelButton":true,
@@ -151,7 +152,9 @@ actualizar.addEventListener('click',async e=>{
             cuentaHistorica.saldo = parseFloat((cuentaHistorica.saldo - cuentaHistorica.debe+total).toFixed(2));
             cuentaHistorica.debe = parseFloat(total.toFixed(2));
             let saldoAnterior = cuentaHistorica.saldo;
-            cliente.saldo += parseFloat(cuentaCompensada.importe.toFixed(2));
+            console.log(cliente.saldo)
+            cliente.saldo = (cliente.saldo + cuentaCompensada.importe).toFixed(2);
+            console.log(cliente)
             for await(let cuenta of cuentasHistoricasRestantes){
                 cuenta.saldo = cuenta.tipo_comp === "Recibo" ? parseFloat((saldoAnterior - cuenta.haber).toFixed(2)) : parseFloat((saldoAnterior + cuenta.debe).toFixed(2));
                 saldoAnterior = cuenta.saldo;
