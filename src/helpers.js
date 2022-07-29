@@ -42,9 +42,9 @@ funciones.cargarFactura = async (venta)=>{
         'CbteFch': parseInt(fecha.replace(/-/g, '')),
         'ImpTotal':venta.precio,
         'ImpTotConc':0,
-        'ImpNeto': parseFloat((venta.gravado21+venta.gravado0).toFixed(2)),
+        'ImpNeto':venta.precio,
         'ImpOpEx': 0,
-        'ImpIVA': parseFloat((venta.iva21+venta.iva0 ).toFixed(2)), //Importe total de IVA
+        'ImpIVA': 0,
         'ImpTrib': 0,
         'MonId': 'PES',
         'PtoVta': 3,//ver

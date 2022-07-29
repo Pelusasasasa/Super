@@ -177,7 +177,9 @@ entregado.addEventListener('keypress',async e=>{
                 hijo[4].children[0].value = saldo;
                 hijo[5].innerHTML = (parseFloat(hijo[2].innerHTML) - parseFloat(hijo[3].innerHTML) - parseFloat(hijo[4].children[0].value)).toFixed(2);
             };
-            console.log(saldo)
+        }
+        if (saldo>0) {
+            crearCompensadaAFavor(saldo)
         }
         total.value = entregado.value;
     }else if(e.key === "Enter" && (parseFloat(entregado.value) === 0 || entregado.value === "")){
@@ -198,8 +200,10 @@ imprimir.addEventListener('click',async e=>{
     const cliente = (await axios.get(`${URL}clientes/id/${codigo.value}`)).data;
     recibo.numero = (await axios.get(`${URL}numero`)).data["Recibo"] + 1;
     recibo.tipo_comp = "Recibo";
-    recibo.descuento = 0;
+    recibo.descuento = 0;   
     recibo.precio = parseFloat(total.value);
+    console.log(recibo)
+    asdasdasdasd
     await modificarCuentaCompensadas();
     await ponerEnCuentaHistorica(recibo);
     await descontarSaldoCliente(recibo.idCliente,recibo.precio);

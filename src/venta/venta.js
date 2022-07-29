@@ -355,7 +355,7 @@ const listarProducto =async(id)=>{
         codBarra.value = producto._id;
         precioU.value = redondear(producto.precio,2);
         idProducto++;
-        producto.idTabla = idProducto;
+        producto.idTabla = `${idProducto}`;
         tbody.innerHTML += `
         <tr id=${producto.idTabla}>
             <td>${cantidad.value}</td>
@@ -432,10 +432,11 @@ borrar.addEventListener('click',e=>{
     descuento.value = redondear((parseFloat(descuentoPor.value) * parseFloat(total.value) / 100),2);
     total.value = redondear(parseFloat(total.value) - parseFloat(descuento.value),2);
     totalGlobal = parseFloat(total.value);
-    listaProductos =  listaProductos.filter(({cantidad,producto})=>producto._id !== seleccionado.id);
+    listaProductos =  listaProductos.filter(({cantidad,producto})=>producto.idTabla !== seleccionado.id);
     tbody.removeChild(seleccionado);
     seleccionado = "";
     codBarra.focus();
+    console.log(listaProductos);
 });
 
 codigo.addEventListener('focus',e=>{

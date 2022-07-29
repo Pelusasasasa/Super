@@ -52,6 +52,7 @@ h1{
 }
 
 .tabla{
+    overflow: scroll;
     margin-top: 1rem;
     height: 70vh;
     border: .1rem solid black;
